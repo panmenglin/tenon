@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "types",
+    "module": "ESNext",
+    "declarationDir": "types",
+    "rootDir": "src",
+    "baseUrl": "src",
+    "emitDeclarationOnly": true,
+    "declaration": true
+  },
+  "include": [],
+  "files": [
+    "./src/index.ts"
+  ]
+}

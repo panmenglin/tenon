@@ -1,6 +1,6 @@
-# 榫卯 TENON
+# 榫卯 SUNMAO
 
-榫卯（TENON）是一个微前端实现库，旨在提供一种项目间共享业务组件的方式，以支持跨团队、大规模项目的解耦和重组。
+榫卯（SUNMAO）是一个微前端实现库，旨在提供一种项目间共享业务组件的方式，以支持跨团队、大规模项目的解耦和重组。
 
 ---
 ## 核心设计理念
@@ -80,19 +80,19 @@
 
 ### 使用
 
-#### TenonContainer
+#### BlockContainer
 
-在基座应用的代码中使用 `<TenonContainer />` 传入区块的配置信息（block）即可实现区块的挂载，例如：
+在基座应用的代码中使用 `<BlockContainer />` 传入区块的配置信息（block）即可实现区块的挂载，例如：
 
 ```javascript
 
-import { TenonContainer } from 'tenon';
+import { BlockContainer } from '@/utils/summao/container';
 
 export const Workbenh: FC = (props: Props) => {
 
   return (
     <div className="container">
-      <TenonContainer
+      <BlockContainer
         key={config.key}
         block={config.block}
         style={{
@@ -121,6 +121,15 @@ export const Workbenh: FC = (props: Props) => {
 #### 应用间通信
 
 产品组装的过程中应用间通信是不可避免的，其中包括主子应用通信、子应用间通信等，榫卯的应用间通信通过在子应用订阅基座的全局状态同时来实现，例如：
+
+主应用初始化全局状态
+```javascript
+
+import { initGlobalState } from '@/utils/summao/global-state'
+
+// 全局状态初始化
+export const globalState = initGlobalState()
+```
 
 子应用订阅状态变化或查询、修改全局状态
 ```javascript
@@ -209,15 +218,13 @@ export default mount;
 output: {
   ...
   globalObject: 'proxyWindow', // 全局对象，固定 proxyWindow
-  library: 'Library Name', // 自定义包名，暴露全局变量
+  library: 'TBBlocks', // 自定义包名，暴露全局变量
   libraryExport: 'default', // 对应入口文件中导出的变量
   libraryTarget: 'umd', // 暴露全局变量
 }
 ```
 
-3、安装并配置 TenonWebpackPlugin，打包后输出 entry.js
+3、安装并配置 SunMaoWebpackPlugin，打包后输出 entry.js
 
-```
-```
 
 对应资源需支持跨域访问。

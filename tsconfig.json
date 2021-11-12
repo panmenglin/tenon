@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "lib": ["dom", "esnext"],
+    "experimentalDecorators": false,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "removeComments": false,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "sourceMap": false,
+    "outDir": "lib",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "strictPropertyInitialization": false,
+    "paths": {
+      "src/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "./*.ts"]
+}
