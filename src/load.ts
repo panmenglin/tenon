@@ -100,7 +100,7 @@ export const load = async ({
   }
 }
 
-const ElementPrototype: Record<string, Function> = {
+const ElementPrototype: Record<string, (node) => void> = {
   appendChild: Element.prototype.appendChild,
   removeChild: Element.prototype.removeChild,
 }
@@ -201,6 +201,7 @@ export const mount = async ({
 
   // shadow dom 中插入组件样式
   tasks[item.path]?.map(task => {
+    // style 方式插入样式 避免 css 异步加载导致样式问题
     tenonMap[item.library].styles.map((styleCode: string) => {
       const styleDom = document.createElement('style');
       styleDom.appendChild(document.createTextNode(styleCode));
