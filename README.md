@@ -1,4 +1,4 @@
-# TENON
+# Tenon
 
 English | [简体中文](./README.zh-CN.md)
 
@@ -19,7 +19,7 @@ At the same time, it is hoped that products can be customized or reorganized bas
 
 ## Features
 
-#### Technology Agnostic
+### Technology Agnostic
 
 It supports block access of various technology stacks such as `React` and `Vue`, but the v1.0 base is built on the basis of React, so the base application only supports `React` for the time being.
 
@@ -38,7 +38,7 @@ The multi-instance sandbox based on `Proxy` ensures that there is no conflict be
 
 ![flow](https://user-images.githubusercontent.com/12044749/141717320-3313ce44-19da-4b20-ab9b-dbc75953ec0b.png)
 
-1. Get configuration and read block information
+**1. Get Configuration**
 
 Tenon will obtain block information from the configuration, including: name, block method, dependencies, business attributes, etc.
 You assemble this configuration through your own operating end and obtain it by providing an interface to achieve page assembly.
@@ -68,27 +68,27 @@ blocks: [{
 }],
 ```
 
-2. Determine the block type
+**2. Determine the Block Type**
 
 If it is a component of the current project, it will be rendered directly;
 
 If it is a sub-application block, create a `Shadow Dom` and proceed to step 3.
 
-4. Load `JS`
+**3. Load JS**
 
 Create a multi-instance JS sandbox based on `Proxy`, change the scope chain through the `with` method, execute the `JS` file associated with the block, and return to the block `mount` method.
 
-3. Load `CSS`
+**4. Load CSS**
 
 Write the block style into the Shadow Dom through the Style tag, and the block content will also be rendered inside it.
 
 There is no asynchronous loading of `CSS` by creating a `Link` tag, mainly to avoid style confusion during the one-step loading process.
 
-5. Mount the block
+**5. Mount**
 
 Execute the `mount` method corresponding to the block `Key` in the configuration, and mount the block in the `Shadow Dom`.
 
-6, rendering
+**6. Render**
 
 Render the block.
 
@@ -117,7 +117,7 @@ Due to the isolation of `JS` and `CSS` between blocks, resources such as third-p
 
 > Base: React 16+
 
-> Block: React 16+ / Vue 2+
+> Block: React 16+ / Vue 2+ / Vue 3
 
 ### Installation
 
@@ -167,9 +167,9 @@ export const Workbenh: FC = (props: Props) => {
 | Property | Description | Type | Default | Version |
 | :--- | :--- | :--- | :--- | :--- |
 | `block` | Block information | `Block` | `{}` | |
-| `style` | Container style | `CSSProperties` | `{}` | |
+| `style` | Container style | `CSSProperties` | - | |
 | `history` | history  | `History` | - | |
-| `data` | Component parameters | `Record<string, any>` | `{}` | |
+| `data` | Component parameters | `Record<string, any>` | - | |
 
 #### Inter-application Communication
 
