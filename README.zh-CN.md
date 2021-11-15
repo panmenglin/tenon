@@ -127,7 +127,7 @@ yarn add tenon-maker
 
 or
 
-npm install tenon-maker
+npm install -S tenon-maker
 ```
 
 ### 使用
