@@ -16,6 +16,11 @@ export type Resource = {
   key: string;
   path: string;
   root: () => ShadowRoot;
+  publicPath: string;
+  externals: {
+    js: string[];
+    css: string[];
+  }
 }
 
 export type EntryConfig = {
@@ -38,7 +43,7 @@ const blockSandboxMapping: Record<string, any> = {} as const; // 组件和沙箱
 // 返回组件渲染方法
 export const blockRender = (key: string): (() => HTMLElement) => {
   const library = blockSandboxMapping[key]
-  const sandboxWindow = tenonMap[library].sandbox?.proxy;
+  const sandboxWindow = tenonMap[library].sandbox?.proxy.window;
 
   return sandboxWindow && sandboxWindow[library][key] ? sandboxWindow[library][key] : () => null
 }
@@ -100,7 +105,7 @@ export const load = async ({
   }
 }
 
-const ElementPrototype: Record<string, (node) => void> = {
+const ElementPrototype: Record<string, (node: any) => void> = {
   appendChild: Element.prototype.appendChild,
   removeChild: Element.prototype.removeChild,
 }
@@ -116,15 +121,16 @@ export const mount = async ({
 
   tenonMap[item.library] = tenonMap[item.library] || {}
 
-  const { js, css } = item;
+  const { js, css, externals } = item;
   const resourcePromise: Promise<any>[] = [];
 
   // 避免重复加载
   if (!tenonMap[item.library].run) {
-    js.map((jsItem: string) => {
+    [...externals?.js, ...js].map((jsItem: string) => {
       resourcePromise.push(
         axios.get(jsItem, {
           fileType: 'js',
+          baseURL: item.publicPath,
         }),
       );
     });
@@ -132,10 +138,11 @@ export const mount = async ({
 
   // 避免重复加载
   if (!tenonMap[item.library].styles) {
-    css.map((cssItem: string) => {
+    [...externals?.css, ...css].map((cssItem: string) => {
       resourcePromise.push(
         axios.get(cssItem, {
           fileType: 'css',
+          baseURL: item.publicPath,
         }),
       );
     });
@@ -179,10 +186,11 @@ export const mount = async ({
 
     const proxyWindow = tenonMap[item.library].sandbox.proxy;
     proxyWindow.body = item.root()
+    proxyWindow.window.Object = Object
 
     // 重写部分 dom 操作方法，解决组件中在 body 挂载/操作 dom 的问题
     Object.keys(ElementPrototype).forEach(key => {
-      proxyWindow.window.Element.prototype[key] = function (...args: any[]) {
+      proxyWindow.window.Element.prototype[key] = function (...args: [node: any]) {
         if (this.tagName === 'BODY') {
           return ElementPrototype[key].apply(proxyWindow.body, args);
         }
@@ -192,11 +200,9 @@ export const mount = async ({
   }
 
   const proxyWindow = tenonMap[item.library].sandbox.proxy;
-  const { window, document: proxyDocument } = proxyWindow
   tenonMap[item.library].run({
-    window,
-    document: proxyDocument,
-    proxyWindow,
+    window: proxyWindow.window,
+    document: proxyWindow.document,
   });
 
   // shadow dom 中插入组件样式

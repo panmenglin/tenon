@@ -7,7 +7,7 @@ export const createEvalScripts = (codes: string[]): any => {
   return new Function(
     `
       return function({window, location, history, document, proxyWindow}){
-        with(proxyWindow) {
+        with(window) {
           ${codes.join('\n')}
         }
       }

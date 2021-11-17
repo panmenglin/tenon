@@ -11,6 +11,11 @@ export declare type Resource = {
     key: string;
     path: string;
     root: () => ShadowRoot;
+    publicPath: string;
+    externals: {
+        js: string[];
+        css: string[];
+    };
 };
 export declare type EntryConfig = {
     key: string;

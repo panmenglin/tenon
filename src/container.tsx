@@ -105,13 +105,14 @@ export const TenonContainer = (props: Props): ReactElement => {
         ...style,
       }}
     >
-      {asyncBlock ? (
+
+      {/* {asyncBlock ? (
         <div className="devtool-block-info">
           {block.name} - {block.domain}
           <br />
           {block.import}
         </div>
-      ) : null}
+      ) : null} */}
 
       {!loaded ? (
         <div className="spin spin-spinning">
