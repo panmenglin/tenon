@@ -4,9 +4,10 @@
  * @returns
  */
 export const createEvalScripts = (codes: string[]): any => {
+
   return new Function(
     `
-      return function({window, location, history, document, proxyWindow}){
+      return function({window, location, history, document}){
         with(window) {
           ${codes.join('\n')}
         }

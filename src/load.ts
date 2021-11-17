@@ -121,12 +121,13 @@ export const mount = async ({
 
   tenonMap[item.library] = tenonMap[item.library] || {}
 
-  const { js, css, externals } = item;
+  const { js, css, externals = { js: [], css: [] } } = item;
   const resourcePromise: Promise<any>[] = [];
 
   // 避免重复加载
   if (!tenonMap[item.library].run) {
-    [...externals?.js, ...js].map((jsItem: string) => {
+    const jsList = [].concat(externals?.js || [], js);
+    jsList.map((jsItem: string) => {
       resourcePromise.push(
         axios.get(jsItem, {
           fileType: 'js',
@@ -138,7 +139,8 @@ export const mount = async ({
 
   // 避免重复加载
   if (!tenonMap[item.library].styles) {
-    [...externals?.css, ...css].map((cssItem: string) => {
+    const cssList = [].concat(externals?.css || [], css);
+    cssList.map((cssItem: string) => {
       resourcePromise.push(
         axios.get(cssItem, {
           fileType: 'css',
@@ -159,9 +161,6 @@ export const mount = async ({
       cssFiles.push(file.data)
     }
   });
-
-  tenonMap[item.library].run = tenonMap[item.library].run || createEvalScripts(jsFiles);
-  tenonMap[item.library].styles = tenonMap[item.library].styles || cssFiles
 
   // 相同 library 复用已有沙箱
   if (!tenonMap[item.library].sandbox) {
@@ -187,6 +186,7 @@ export const mount = async ({
     const proxyWindow = tenonMap[item.library].sandbox.proxy;
     proxyWindow.body = item.root()
     proxyWindow.window.Object = Object
+    proxyWindow.window.Reflect = Reflect
 
     // 重写部分 dom 操作方法，解决组件中在 body 挂载/操作 dom 的问题
     Object.keys(ElementPrototype).forEach(key => {
@@ -200,10 +200,18 @@ export const mount = async ({
   }
 
   const proxyWindow = tenonMap[item.library].sandbox.proxy;
-  tenonMap[item.library].run({
-    window: proxyWindow.window,
-    document: proxyWindow.document,
-  });
+
+  tenonMap[item.library].run = tenonMap[item.library].run || createEvalScripts(jsFiles).bind(proxyWindow.window);
+  tenonMap[item.library].styles = tenonMap[item.library].styles || cssFiles
+
+  try {
+    tenonMap[item.library].run({
+      window: proxyWindow.window,
+      document: proxyWindow.document,
+    });
+  } catch (error) {
+    console.error(error)
+  }
 
   // shadow dom 中插入组件样式
   tasks[item.path]?.map(task => {
