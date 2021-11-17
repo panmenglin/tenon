@@ -110,6 +110,8 @@ const ElementPrototype: Record<string, (node: any) => void> = {
   removeChild: Element.prototype.removeChild,
 }
 
+const WindowProperty: string[] = ['Object', 'Reflect', 'Array', 'Function', 'Boolean', 'Symbol', 'Error', 'Promise']
+
 /**
  * 加载模块资源
  * @param item
@@ -126,7 +128,7 @@ export const mount = async ({
 
   // 避免重复加载
   if (!tenonMap[item.library].run) {
-    const jsList = [].concat(externals?.js || [], js);
+    const jsList = (externals?.js || []).concat(js);
     jsList.map((jsItem: string) => {
       resourcePromise.push(
         axios.get(jsItem, {
@@ -139,7 +141,7 @@ export const mount = async ({
 
   // 避免重复加载
   if (!tenonMap[item.library].styles) {
-    const cssList = [].concat(externals?.css || [], css);
+    const cssList = (externals?.css || []).concat(css);
     cssList.map((cssItem: string) => {
       resourcePromise.push(
         axios.get(cssItem, {
@@ -185,8 +187,10 @@ export const mount = async ({
 
     const proxyWindow = tenonMap[item.library].sandbox.proxy;
     proxyWindow.body = item.root()
-    proxyWindow.window.Object = Object
-    proxyWindow.window.Reflect = Reflect
+
+    WindowProperty.map((key: any) => {
+      proxyWindow.window[key] = window[key]
+    })
 
     // 重写部分 dom 操作方法，解决组件中在 body 挂载/操作 dom 的问题
     Object.keys(ElementPrototype).forEach(key => {

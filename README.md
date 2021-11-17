@@ -231,8 +231,8 @@ import ReactDOM from 'react-dom';
 import { Todo } from './todo';
 
 const mount = {
-  Todo: (module, el) => {
-    ReactDOM.render(<Todo></Todo>, el);
+  Todo: (el, props) => {
+    ReactDOM.render(<Todo {...props}></Todo>, el);
   }
 };
 
@@ -246,7 +246,7 @@ import Vue from 'vue';
 import { default as Todo } from './todo';
 
 const mount = {
-  TodoList: (module, el) => {
+  TodoList: (el, props) => {
     new Vue({
       render: (h) => h(Todo),
     }).$mount(el);
@@ -261,7 +261,7 @@ export default mount;
 ```javascript
 output: {
   ...
-  globalObject: 'proxyWindow', // Global object, fixed proxyWindow
+  globalObject: 'window', // Global object
   library: 'Library Name', // Customize the package name and expose global variables
   libraryExport: 'default', // Corresponding to the variables exported in the entry file
   libraryTarget: 'umd', // Expose global variables

@@ -230,8 +230,8 @@ import ReactDOM from 'react-dom';
 import { Todo } from './todo';
 
 const mount = {
-  Todo: (module, el) => {
-    ReactDOM.render(<Todo></Todo>, el);
+  Todo: (el, props) => {
+    ReactDOM.render(<Todo {...props}></Todo>, el);
   }
 };
 
@@ -245,7 +245,7 @@ import Vue from 'vue';
 import { default as Todo } from './todo';
 
 const mount = {
-  TodoList: (module, el) => {
+  TodoList: (el, props) => {
     new Vue({
       render: (h) => h(Todo),
     }).$mount(el);
@@ -260,7 +260,7 @@ export default mount;
 ```javascript
 output: {
   ...
-  globalObject: 'proxyWindow', // 全局对象，固定 proxyWindow
+  globalObject: 'window', // 全局对象
   library: 'Library Name', // 自定义包名，暴露全局变量
   libraryExport: 'default', // 对应入口文件中导出的变量
   libraryTarget: 'umd', // 暴露全局变量
