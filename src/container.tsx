@@ -16,18 +16,18 @@ import { load, blockRender } from './load';
 import './index.less';
 
 // stores
-import { globalState } from './index'
+import { globalState } from './index';
 
 // types
 import { History } from 'history';
-import { TenonBlock } from './type'
+import { TenonBlock } from './type';
 
 type Props = {
   block: TenonBlock;
   style?: CSSProperties;
   history: History;
   data?: Record<string, string>;
-  mode?: 'development' | 'production'
+  mode?: 'development' | 'production';
 };
 
 export const TenonContainer = (props: Props): ReactElement => {
@@ -35,9 +35,10 @@ export const TenonContainer = (props: Props): ReactElement => {
 
   const shadowDom: any = useRef(null);
 
-  const asyncBlock = mode === 'development' && block.import && typeof block.import === 'string';
-
   const [loaded, setLoaded] = useState(false);
+
+  const asyncBlock =
+    mode === 'development' && block.import && typeof block.import === 'string';
 
   /**
    * 更新加载状态
@@ -100,19 +101,17 @@ export const TenonContainer = (props: Props): ReactElement => {
 
   return (
     <div
-      className={`block-container ${asyncBlock ? 'async-blcok' : ''}`}
+      className={`block-container ${asyncBlock ? 'async-block' : ''}`}
       style={{
+        minHeight: !loaded ? '200px' : 'initial',
         ...style,
       }}
     >
-
-      {/* {asyncBlock ? (
+      {asyncBlock ? (
         <div className="devtool-block-info">
-          {block.name} - {block.domain}
-          <br />
-          {block.import}
+          {block.name} - {block.domain} / {block.import}
         </div>
-      ) : null} */}
+      ) : null}
 
       {!loaded ? (
         <div className="spin spin-spinning">

@@ -39,6 +39,7 @@ type EntryConfigParams = {
 
 const tenonMap: Record<string, any> = {} as const; // summao 存储空间
 const blockSandboxMapping: Record<string, any> = {} as const; // 组件和沙箱 mapping
+const entryMap: Record<string, any> = {} as const;
 
 // 返回组件渲染方法
 export const blockRender = (key: string): (() => HTMLElement) => {
@@ -78,7 +79,9 @@ export const load = async ({
 
       const res: {
         data: Resource
-      } = await axios.get(config.import);
+      } = entryMap[config.import] || await axios.get(config.import);
+
+      entryMap[config.import] = res;
 
       mount({
         item: {
@@ -90,27 +93,20 @@ export const load = async ({
       })
     }
 
-    // 限制了同一页面只能加载一次相同组件
-    if (!tasks[config.import]?.find(block => block.key === config.key)) {
-      // 添加任务
-      tasks[config.import]?.push({
-        key: config.key,
-        callback,
-        root,
-      })
-    }
+    tasks[config.import]?.push({
+      key: config.key,
+      callback,
+      root,
+    })
 
   } else {
     callback(config.key);
   }
 }
 
-const ElementPrototype: Record<string, (node: any) => void> = {
-  appendChild: Element.prototype.appendChild,
-  removeChild: Element.prototype.removeChild,
-}
-
-const WindowProperty: string[] = ['Object', 'Reflect', 'Array', 'Function', 'Boolean', 'Symbol', 'Error', 'Promise']
+const ElementPrototype = ['appendChild', 'removeChild'];
+const DocumentFragmentPrototype = ['getElementById'];
+const Unscopables = ['Object', 'Reflect', 'Array', 'Function', 'Boolean', 'Symbol', 'Error', 'Promise'];
 
 /**
  * 加载模块资源
@@ -174,9 +170,6 @@ export const mount = async ({
 
     const context = {
       window: _window.contentWindow,
-      location,
-      history,
-      document: _window.contentWindow!.document,
     };
 
     tenonMap[item.library].sandbox = new MultipleProxySandbox(
@@ -188,19 +181,33 @@ export const mount = async ({
     const proxyWindow = tenonMap[item.library].sandbox.proxy;
     proxyWindow.body = item.root()
 
-    WindowProperty.map((key: any) => {
+    Unscopables.map((key: any) => {
       proxyWindow.window[key] = window[key]
     })
 
     // 重写部分 dom 操作方法，解决组件中在 body 挂载/操作 dom 的问题
-    Object.keys(ElementPrototype).forEach(key => {
+    ElementPrototype.map((key: string)=> {
       proxyWindow.window.Element.prototype[key] = function (...args: [node: any]) {
         if (this.tagName === 'BODY') {
-          return ElementPrototype[key].apply(proxyWindow.body, args);
+        // @ts-ignore
+          return Element.prototype[key].apply(proxyWindow.body, args);
         }
-        return ElementPrototype[key].apply(this, args);
+        // @ts-ignore
+        return Element.prototype[key].apply(this, args);
       };
     })
+
+    DocumentFragmentPrototype.map((key: string) => {
+      proxyWindow.window.Document.prototype.getElementById = function (...args: [any]) {
+        if (this instanceof proxyWindow.window.Document) {
+        // @ts-ignore
+          return DocumentFragment.prototype[key].apply(proxyWindow.body, args)
+        }
+        // @ts-ignore
+        return Document.prototype[key].apply(this, args)
+      }
+    })
+
   }
 
   const proxyWindow = tenonMap[item.library].sandbox.proxy;
@@ -209,10 +216,10 @@ export const mount = async ({
   tenonMap[item.library].styles = tenonMap[item.library].styles || cssFiles
 
   try {
-    tenonMap[item.library].run({
-      window: proxyWindow.window,
-      document: proxyWindow.document,
-    });
+    tenonMap[item.library].run(
+      proxyWindow.window,
+      proxyWindow.window.document,
+    );
   } catch (error) {
     console.error(error)
   }

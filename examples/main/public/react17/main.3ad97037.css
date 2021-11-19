@@ -1,0 +1,43 @@
+/*!**********************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/less-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./src/components/user-info/index.less ***!
+  \**********************************************************************************************************************************************************/
+.user-info-block {
+  padding: 16px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+}
+.user-info-userface {
+  height: 64px;
+  width: 64px;
+  border-radius: 64px;
+  margin-right: 24px;
+  overflow: hidden;
+}
+.user-info-userface img {
+  width: 100%;
+  height: 100%;
+}
+.user-info-title {
+  line-height: 28px;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.65);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.user-info-info {
+  line-height: 28px;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+/*!***********************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/less-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./src/components/chart-line/index.less ***!
+  \***********************************************************************************************************************************************************/
+.chart-line-block {
+  padding: 16px;
+  background: #fff;
+}
+
+
+/*# sourceMappingURL=main.3ad97037.css.map*/

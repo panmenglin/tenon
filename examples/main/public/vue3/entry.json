@@ -1,0 +1,15 @@
+{
+    "js": [
+        "js/chunk-vendors.e7f5243e.js",
+        "js/index.0c6b99f3.js"
+    ],
+    "css": [
+        "css/chunk-vendors.789db11c.css",
+        "css/index.6248f24a.css"
+    ],
+    "library": "Vue3Blocks",
+    "publicPath": "http://localhost:7001/vue3/",
+    "blocks": [
+        "ChartLine"
+    ]
+}
