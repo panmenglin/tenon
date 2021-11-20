@@ -1,14 +1,12 @@
 import React, { FC, ReactNode, useCallback, useState } from 'react';
 import { Row, Col } from 'antd';
-// import { observer } from 'mobx-react-lite';
 
 // types
 import { History } from 'history';
 import { match } from 'react-router';
 
 // utils
-import { TenonContainer } from 'tenon-maker';
-// import { TenonContainer } from '../../../../src';
+import { TenonContainer } from '../../../../src';
 
 import './index.less'
 

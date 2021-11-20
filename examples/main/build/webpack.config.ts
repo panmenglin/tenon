@@ -63,7 +63,6 @@ export default (): Configuration => {
       // globalObject: 'window',
     },
     resolve: {
-      modules: [path.join(__dirname, '../../'), 'node_modules'],
       alias: {
         '@': path.resolve(__dirname, '../src/'),
         "@typings": path.resolve(__dirname, '../typings/'),
