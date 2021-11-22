@@ -10,7 +10,7 @@ module.exports = {
         NODE_ENV === 'development' ? 'src/main.js' : 'src/components/entry.js',
     },
   },
-  devServer: { port: 7005 },
+  devServer: { port: 7007 },
   outputDir: path.resolve(
     __dirname,
     NODE_ENV === 'development' ? './dist' : '../main/public/vue'
@@ -22,8 +22,8 @@ module.exports = {
     output: {
       globalObject: 'window',
       library: 'VueBlocks',
-      libraryExport: 'default', // 对应 ./index.ts 中导出的变量
-      libraryTarget: 'umd', // 暴露全局变量
+      libraryExport: 'default',
+      libraryTarget: 'umd',
     },
     plugins: [
       new TenonWebpackPlugin({

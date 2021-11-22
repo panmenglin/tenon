@@ -1,13 +1,11 @@
-import path from 'path';
+import webpack from 'webpack';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import path from 'path';
 
 import type { Configuration as WebpackConfiguration } from 'webpack'
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
-
-
-import { TenonWebpackPlugin } from 'tenon-webpack-plugin'
-import { externals, cdnFiles } from '../externals';
 
 interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
@@ -17,33 +15,50 @@ const { NODE_ENV } = process.env;
 
 export default (): Configuration => {
   const config: Configuration = {
-    entry: './src/components/entry.tsx',
+    entry: './src/main.tsx',
     mode: 'development',
     devtool: 'source-map',
     output: {
-      filename: 'index.min.js',
-      path: path.resolve(__dirname, '../../main/public/react17'),
-      publicPath: 'http://localhost:7001/react17/',
-      globalObject: 'window',
-      library: 'TBBlocks',
-      libraryExport: 'default', // 对应 ./index.ts 中导出的变量
-      libraryTarget: 'umd', // 暴露全局变量
+      filename: 'static/[name]_[hash:8].js',
+      path: path.resolve(__dirname, './dist'),
+      publicPath: '/',
     },
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '../src/'),
+        '@': path.resolve(__dirname, './src/'),
+        "@typings": path.resolve(__dirname, './typings/'),
       },
-      // 支持查询模块文件类型
-      // 例如：如果不写 tsx 文件中使用 import xxx from './xxx' 则不会引入 app.tsx
-      extensions: ['.js', '.jsx', '.ts', '.tsx', '.css', '.less'],
+      extensions: ['.js', '.jsx', '.ts', '.tsx', '.css', '.less', '.scss', '.md'],
     },
-    externals: externals[NODE_ENV],
+    devServer: {
+      port: '7001', //默认是8080
+      historyApiFallback: true, // 需要与 publicPath: '/', 配合使用，404指向 index.html
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+      hot: true,
+      allowedHosts: [
+        'localhost',
+      ],
+      proxy: {},
+    },
+    optimization: {
+      // 每个入口添加一个只含有 runtime 的额外 chunk, 解决 md 文件更新 devServer hot 更新失败的问题
+      runtimeChunk: 'single',
+    },
     module: {
       rules: [
         {
           test: /\.(js|jsx|ts|tsx)$/,
-          exclude: /(node_modules|bower_components)/,
           loader: 'babel-loader',
+        },
+        {
+          test: /\.css$/,
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+            },
+            'css-loader'],
         },
         {
           test: /\.less$/,
@@ -78,23 +93,27 @@ export default (): Configuration => {
             },
           ],
         },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/,
+          use: ['file-loader'],
+        },
       ],
     },
     plugins: [
-      new CleanWebpackPlugin(),
+      new CleanWebpackPlugin({}),
+      new HtmlWebpackPlugin({
+        template: './public/index.html',
+        filename: 'index.html',
+        inject: 'body',
+      }),
       new MiniCssExtractPlugin({
-        filename: '[name].[hash:8].css',
-        chunkFilename: '[name].[hash:8].css',
+        filename: 'static/[name].[hash:8].css',
+        chunkFilename: 'static/[name].[hash:8].css',
       }),
-      new TenonWebpackPlugin({
-        blocks: ["UserInfo", "ChartLine"],
-        externals: {
-          js: cdnFiles[NODE_ENV].js,
-          css: cdnFiles[NODE_ENV].css,
-        },
+      new webpack.DefinePlugin({
+        __DEVTOOL: NODE_ENV === 'development' ? true : false,
       }),
-    ],
+    ]
   }
-
   return config
 }

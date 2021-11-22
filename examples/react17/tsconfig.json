@@ -12,8 +12,6 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    // "isolatedModules": true,
-    // "noEmit": true,
     "declaration": true,
     "jsx": "react",
     "experimentalDecorators": true,

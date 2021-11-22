@@ -1,6 +1,6 @@
 {
-  "name": "vue3",
-  "version": "0.1.0",
+  "name": "tenon-example-vue3",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve",

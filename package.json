@@ -36,7 +36,7 @@
     "install:all": "npm run install:main && npm run install:react17 && npm run install:react16 && npm run install:vue && npm run install:vue3",
     "build:examples": "npm run build:react17 && npm run build:vue3 && npm run build:vue",
     "install:main": "cd examples/main && yarn",
-    "start:main": "npm run build:examples && cd examples/main && yarn start",
+    "start:main": "cd examples/main && yarn start",
     "install:react17": "cd examples/react17 && yarn",
     "start:react17": "cd examples/react17 && yarn start",
     "build:react17": "cd examples/react17 && yarn build",

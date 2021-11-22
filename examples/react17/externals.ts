@@ -1,7 +1,6 @@
 import { version as reactVersion } from 'react/package.json';
 import { version as reactDomVersion } from 'react-dom/package.json';
 import { version as antdVersion } from 'antd/package.json';
-import { version as momentVersion } from 'moment/package.json';
 
 export const externals = {
   react: 'React',
@@ -17,7 +16,7 @@ export const cdnFiles = {
   js: [
     `http://unpkg.com/react@${reactVersion}/umd/react.production.min.js`,
     `http://unpkg.com/react-dom@${reactDomVersion}/umd/react-dom.production.min.js`,
-    `http://unpkg.com/moment@${momentVersion}/min/moment-with-locales.min.js`,
+    `http://unpkg.com/moment@2.25.3/min/moment-with-locales.min.js`,
     `http://unpkg.com/antd@${antdVersion}/dist/antd.min.js`,
   ],
 }

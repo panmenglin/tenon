@@ -7,8 +7,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="format-detection" content="telephone=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <%= htmlWebpackPlugin.options.cdnFiles.css %>
   </head>
   <body>
     <div id="root"></div>
+    <%= htmlWebpackPlugin.options.cdnFiles.js %>
   </body>
 </html>
+
