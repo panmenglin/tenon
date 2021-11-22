@@ -58,7 +58,7 @@
     "mini-css-extract-plugin": "^2.4.2",
     "process": "^0.11.10",
     "style-loader": "^3.2.1",
-    "tenon-webpack-plugin": "^1.0.3",
+    "tenon-webpack-plugin": "^1.0.5",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.2",
     "url-loader": "^4.1.1",

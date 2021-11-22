@@ -117,6 +117,27 @@ Tenon 在设计初的主要目的就是进行多区块的页面拼装，在挂�
 
 > 区块：React 16+ / Vue 2+
 
+### 示例
+
+`examples` 中提供了 React 基座集成不同技术栈区块的示例，目前包括：React16、React17、Vue、Vue3，详细使用可参见其中示例。
+
+根目录执行命令进行，依赖的安装和示例区块的打包。
+
+1、安装依赖
+```
+npm run install:all
+```
+
+2、打包区块
+```
+npm run build:examples
+```
+
+3、启动基座
+```
+npm run start:main
+```
+
 ### 安装
 
 基座

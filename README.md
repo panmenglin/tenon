@@ -119,6 +119,27 @@ Due to the isolation of `JS` and `CSS` between blocks, resources such as third-p
 
 > Block: React 16+ / Vue 2+ / Vue 3
 
+### Examples
+
+Examples of React base integration of different technology stack blocks are provided in `examples`, currently including: React16, React17, Vue, Vue3. For detailed usage, please refer to the examples.
+
+The root directory executes the command, depends on the installation and the sample block is packaged.
+
+1、Installation dependencies
+```
+npm run install:all
+```
+
+2、Build blocks
+```
+npm run build:examples
+```
+
+3、Start the main App
+```
+npm run start:main
+```
+
 ### Installation
 
 Pedestal
