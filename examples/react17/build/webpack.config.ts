@@ -1,9 +1,7 @@
 import webpack from 'webpack';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-// import CopyWebpackPlugin from 'copy-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-// import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import path from 'path';
 
 
@@ -87,33 +85,6 @@ export default (): Configuration => {
         'local.jd.com',
         'localhost',
       ],
-      // watchContentBase: false,
-      // liveReload: true,
-      proxy: {
-        '/api': {
-          target: 'http://11.50.62.179',
-        },
-        '/domain/basic/ims': {
-          target: 'http://scc.jd.com',
-          secure: false,
-          changeOrigin: true,
-        },
-        '/product': {
-          target: 'http://test.jd.com:8088',
-          secure: false,
-          changeOrigin: true,
-        },
-        '/dept': {
-          target: 'http://test.jd.com:8088',
-          secure: false,
-          changeOrigin: true,
-        },
-        '/pocInstocklAnalysis': {
-          target: 'http://test.jd.com:8088',
-          secure: false,
-          changeOrigin: true,
-        },
-      },
     },
     optimization: {
       // 每个入口添加一个只含有 runtime 的额外 chunk, 解决 md 文件更新 devServer hot 更新失败的问题

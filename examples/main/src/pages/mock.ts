@@ -19,6 +19,15 @@ export const Config = {
       }],
     },
     {
+      key: '折线图22',
+      span: 24,
+      blocks: [{
+        name: 'react16/antd/@ant-design/charts',
+        key: 'ChartLine',
+        import: 'http://localhost:7001/react16/entry.json',
+      }],
+    },
+    {
       key: '折线图vue3',
       span: 12,
       blocks: [{

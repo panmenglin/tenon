@@ -73,7 +73,7 @@ export default (): Configuration => {
     },
     // externals: externals[NODE_ENV],
     devServer: {
-      port: '7001', //默认是8080
+      port: '7003', //默认是8080
       historyApiFallback: true, // 需要与 publicPath: '/', 配合使用，404指向 index.html
       headers: {
         'Access-Control-Allow-Origin': '*',
