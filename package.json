@@ -28,18 +28,27 @@
     "url": "https://github.com/panmenglin/tenon/issues"
   },
   "scripts": {
-    "clean": "del-cli --dot=true \"./lib/**/*\" && del-cli --dot=true \"./types/**/*\" && del-cli --dot=true \"./module/**/*\"",
+    "clean": "del-cli --dot=true \"./lib/**/*\" && del-cli --dot=true \"./types/**/*\"",
     "lint": "eslint --ext .js,.ts .",
     "lint.fix": "eslint --ext .js,.ts --fix .",
     "typescript": "tsc",
-    "build": "npm run clean && tsc -p tsconfig.lib.json && tsc -p tsconfig.module.json && tsc -p tsconfig.declaration.json && cp src/*.less lib/ && cp src/*.less module/",
+    "build": "npm run clean && tsc -p tsconfig.lib.json && tsc -p tsconfig.declaration.json && cp src/*.less lib/ && cp src/*.less module/",
+    "install:all": "npm run install:main && npm run install:react17 && npm run install:react16 && npm run install:vue && npm run install:vue3",
+    "build:examples": "npm run build:react17 && npm run build:react16 && npm run build:vue3 && npm run build:vue",
     "install:main": "cd examples/main && yarn",
-    "start:main": "cd examples/main && yarn start",
+    "start:main": "npm run build:examples && cd examples/main && yarn start",
     "install:react17": "cd examples/react17 && yarn",
     "start:react17": "cd examples/react17 && yarn start",
     "build:react17": "cd examples/react17 && yarn build",
+    "install:react16": "cd examples/react16 && yarn",
+    "start:react16": "cd examples/react16 && yarn start",
+    "build:react16": "cd examples/react16 && yarn build",
     "install:vue3": "cd examples/vue3 && yarn",
-    "start:vue3": "cd examples/vue3 && yarn start"
+    "start:vue3": "cd examples/vue3 && yarn start",
+    "build:vue3": "cd examples/vue3 && yarn build",
+    "install:vue": "cd examples/vue && yarn",
+    "start:vue": "cd examples/vue && yarn start",
+    "build:vue": "cd examples/vue && yarn build"
   },
   "peerDependencies": {
     "react": ">=16.8",

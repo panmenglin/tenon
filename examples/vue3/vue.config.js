@@ -7,9 +7,9 @@ module.exports = {
       entry: 'src/components/entry.js' // 把src 修改为examples
     }
   },
+  devServer: { port: 9999 },
   outputDir: path.resolve(__dirname, '../main/public/vue3'),
   publicPath: 'http://localhost:7001/vue3/',
-  // productionSourceMap: process.env.NODE_ENV === 'development',
   configureWebpack: {
     mode: 'development',
     devtool: 'source-map',

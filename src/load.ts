@@ -106,7 +106,7 @@ export const load = async ({
 
 const ElementPrototype = ['appendChild', 'removeChild'];
 const DocumentFragmentPrototype = ['getElementById'];
-const Unscopables = ['Object', 'Reflect', 'Array', 'Function', 'Boolean', 'Symbol', 'Error', 'Promise'];
+const Unscopables = ['Object', 'Reflect', 'Array', 'Function', 'Boolean', 'Symbol', 'Error', 'Promise', 'ResizeObserver'];
 
 /**
  * 加载模块资源
@@ -186,10 +186,10 @@ export const mount = async ({
     })
 
     // 重写部分 dom 操作方法，解决组件中在 body 挂载/操作 dom 的问题
-    ElementPrototype.map((key: string)=> {
+    ElementPrototype.map((key: string) => {
       proxyWindow.window.Element.prototype[key] = function (...args: [node: any]) {
         if (this.tagName === 'BODY') {
-        // @ts-ignore
+          // @ts-ignore
           return Element.prototype[key].apply(proxyWindow.body, args);
         }
         // @ts-ignore
@@ -200,7 +200,7 @@ export const mount = async ({
     DocumentFragmentPrototype.map((key: string) => {
       proxyWindow.window.Document.prototype.getElementById = function (...args: [any]) {
         if (this instanceof proxyWindow.window.Document) {
-        // @ts-ignore
+          // @ts-ignore
           return DocumentFragment.prototype[key].apply(proxyWindow.body, args)
         }
         // @ts-ignore
@@ -208,6 +208,16 @@ export const mount = async ({
       }
     })
 
+    proxyWindow.window.Window.prototype.addEventListener = function (...args: any) {
+      return Window.prototype.addEventListener.apply(window, args)
+    }
+
+    proxyWindow.window.Window.prototype.removeEventListener = function (...args: any) {
+      return Window.prototype.removeEventListener.apply(window, args)
+    }
+
+    // proxyWindow.window.ResizeObserver = undefined
+    // proxyWindow.window.MutationObserver = undefined
   }
 
   const proxyWindow = tenonMap[item.library].sandbox.proxy;

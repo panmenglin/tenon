@@ -7,3 +7,6 @@ lib
 yarn-error.log
 
 *.vim
+
+examples/main/public/**/*
+

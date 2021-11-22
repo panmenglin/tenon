@@ -3,13 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vue/composition-api": "^1.4.0",
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "echarts": "^5.2.2",
+    "view-design": "^4.7.0",
+    "vue": "^2.6.11",
+    "vue-echarts": "^6.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -18,6 +22,7 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "tenon-webpack-plugin": "^1.0.3",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {

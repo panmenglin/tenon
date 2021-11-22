@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import ChartColumn from "./components/ChartLine.vue";
+import ChartColumn from "./components/LineChart.vue";
 
 export default {
   name: "App",
