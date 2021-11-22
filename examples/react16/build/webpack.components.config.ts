@@ -6,10 +6,6 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import type { Configuration } from 'webpack'
 
 import { TenonWebpackPlugin } from 'tenon-webpack-plugin'
-import { externals, cdnFiles } from './externals';
-
-
-const { NODE_ENV } = process.env;
 
 export default (): Configuration => {
   const config: Configuration = {
@@ -22,23 +18,20 @@ export default (): Configuration => {
       publicPath: 'http://localhost:7001/react16/',
       globalObject: 'window',
       library: 'React16Blocks',
-      libraryExport: 'default', // 对应 ./index.ts 中导出的变量
-      libraryTarget: 'umd', // 暴露全局变量
+      libraryExport: 'default',
+      libraryTarget: 'umd',
     },
     resolve: {
+      modules: ['node_modules'],
       alias: {
         '@': path.resolve(__dirname, '../src/'),
       },
-      // 支持查询模块文件类型
-      // 例如：如果不写 tsx 文件中使用 import xxx from './xxx' 则不会引入 app.tsx
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.css', '.less'],
     },
-    externals: externals[NODE_ENV],
     module: {
       rules: [
         {
           test: /\.(js|jsx|ts|tsx)$/,
-          exclude: /(node_modules|bower_components)/,
           loader: 'babel-loader',
         },
         {
@@ -51,12 +44,10 @@ export default (): Configuration => {
             {
               loader: 'less-loader',
               options: {
-                lessOptions: {
-                  javascriptEnabled: true,
-                  modifyVars: {
-                    '@layout-header-background': '#fff',
-                    '@layout-footer-background': '#fff',
-                  },
+                javascriptEnabled: true,
+                modifyVars: {
+                  '@layout-header-background': '#fff',
+                  '@layout-footer-background': '#fff',
                 },
               },
             },
@@ -74,13 +65,17 @@ export default (): Configuration => {
             },
           ],
         },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/,
+          use: ['file-loader'],
+        },
       ],
     },
     plugins: [
       new HtmlWebpackPlugin({
         template: './public/index.html',
-        filename: 'index.html', //打包后的文件名
-        inject: 'body', // 指定 js 插入位置
+        filename: 'index.html',
+        inject: 'body',
       }),
       new MiniCssExtractPlugin({
         filename: '[name].[hash:8].css',
@@ -88,14 +83,10 @@ export default (): Configuration => {
       }),
       new TenonWebpackPlugin({
         blocks: ["UserInfo", "ChartLine"],
-        externals: {
-          js: cdnFiles[NODE_ENV].js,
-          css: cdnFiles[NODE_ENV].css,
-        },
       }),
-      new CleanWebpackPlugin(),
+      new CleanWebpackPlugin({}),
     ],
-  }
+  };
 
   return config
 }

@@ -1,5 +1,5 @@
 {
-  "name": "tenon-example-main",
+  "name": "tenon-example-react17",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
@@ -15,6 +15,7 @@
     "@ant-design/charts": "^1.2.14",
     "ahooks": "^2.10.11",
     "antd": "^4.16.13",
+    "moment": "^2.29.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-router": "^5.2.0",

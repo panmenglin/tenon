@@ -1,64 +1,52 @@
 import webpack from 'webpack';
+import path from 'path';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import path from 'path';
-
-
-// import { name } from '../package.json';
-// import { externals, cdnFiles } from './externals';
+import { TenonWebpackPlugin } from 'tenon-webpack-plugin'
 
 import type { Configuration as WebpackConfiguration } from 'webpack'
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
-
 
 interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
 }
 
+import { externals, cdnFiles } from './externals';
+
 const { NODE_ENV } = process.env;
 
 const plugins = [
-  new HtmlWebpackPlugin({
-    // title: '',
-    template: './public/index.html',
-    filename: 'index.html', //打包后的文件名
-    cdnFiles: {
-      css: '',
-      // css: cdnFiles[NODE_ENV].css.map(src => `<link rel="stylesheet" type="text/css" href="${src}">`).join(''),
-      js: '',
-      // js: cdnFiles[NODE_ENV].js.map(src => `<script rel="preload" src="${src}"></script>`).join(''),
+  new TenonWebpackPlugin({
+    blocks: ["UserInfo", "ChartLine"],
+    externals: {
+      js: cdnFiles[NODE_ENV].js,
+      css: cdnFiles[NODE_ENV].css,
     },
-    inject: 'body', // 指定 js 插入位置
-  }),
-  new MiniCssExtractPlugin({
-    filename: 'static/[name].[hash:8].css',
-    chunkFilename: 'static/[name].[hash:8].css',
-  }),
-  // new BundleAnalyzerPlugin(),
-  new webpack.DefinePlugin({
-    __DEVTOOL: NODE_ENV === 'development' ? true : false,
-    __LoginHost: NODE_ENV === 'development' ? `'http://test.ssa.jd.com/sso/login?ReturnUrl='` : `'http://ssa.jd.com/sso/login?ReturnUrl='`,
   }),
 ]
 
 export default (): Configuration => {
   const config: Configuration = {
-    entry: {
-      // components: './src/components/index.ts',
-      doc: './src/main.tsx', // 导出生命周期的 js 需要放在最后
-    },
-    // mode: NODE_ENV === 'production' ? 'production' : 'development',
+    entry: NODE_ENV === 'development' ? './src/main.tsx' : './src/components/entry.tsx',
     mode: 'development',
     devtool: 'source-map',
     output: {
-      filename: 'static/[name]_[hash:8].js',
-      path: path.resolve(__dirname, '../dist'),
-      publicPath: '/',
+      // filename: 'static/[name]_[hash:8].js',
+      // path: path.resolve(__dirname, '../dist'),
+      // publicPath: '/',
       // library: 'react-components', // `${name}-[name]`,
       // libraryTarget: 'umd',
       // chunkLoadingGlobal: `webpackJsonp_${name}`,
       // globalObject: 'window',
+
+      filename: 'index.min.js',
+      path: path.resolve(__dirname, '../main/public/react17'),
+      publicPath: NODE_ENV === 'development' ? '/' : 'http://localhost:7001/react17/',
+      globalObject: 'window',
+      library: 'TBBlocks',
+      libraryExport: 'default', // 对应 ./index.ts 中导出的变量
+      libraryTarget: 'umd', // 暴露全局变量
     },
     resolve: {
       modules: [path.join(__dirname, '../../'), 'node_modules'],
@@ -143,10 +131,22 @@ export default (): Configuration => {
         },
       ],
     },
-    plugins: NODE_ENV !== 'production' ? plugins : [
-      ...plugins,
-      new CleanWebpackPlugin({}),
-    ],
+    plugins: [
+      new CleanWebpackPlugin(),
+      new HtmlWebpackPlugin({
+        template: './public/index.html',
+        filename: 'index.html',
+        cdnFiles: {
+          css: cdnFiles.css.map(src => `<link rel="stylesheet" type="text/css" href="${src}">`).join(''),
+          js: cdnFiles.js.map(src => `<script rel="preload" src="${src}"></script>`).join(''),
+        },
+        inject: 'body', // 指定 js 插入位置
+      }),
+      new MiniCssExtractPlugin({
+        filename: 'static/[name].[hash:8].css',
+        chunkFilename: 'static/[name].[hash:8].css',
+      }),
+    ]
   }
   return config
 }

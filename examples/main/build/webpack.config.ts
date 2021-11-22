@@ -40,7 +40,6 @@ const plugins = [
   // new BundleAnalyzerPlugin(),
   new webpack.DefinePlugin({
     __DEVTOOL: NODE_ENV === 'development' ? true : false,
-    __LoginHost: NODE_ENV === 'development' ? `'http://test.ssa.jd.com/sso/login?ReturnUrl='` : `'http://ssa.jd.com/sso/login?ReturnUrl='`,
   }),
 ]
 

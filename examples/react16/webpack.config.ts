@@ -1,44 +1,47 @@
-import webpack from 'webpack';
 import path from 'path';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+import { TenonWebpackPlugin } from 'tenon-webpack-plugin'
 
-const useBrowser = process.env.BROWSER != 'none';
+import type { Configuration as WebpackConfiguration } from 'webpack'
+import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
 
-import type { Configuration } from 'webpack'
+interface Configuration extends WebpackConfiguration {
+  devServer?: WebpackDevServerConfiguration;
+}
+
+const { NODE_ENV } = process.env;
+
+const plugins = NODE_ENV === 'development' ? [] : [
+  new TenonWebpackPlugin({
+    blocks: ["UserInfo", "ChartLine"],
+  }),
+]
 
 export default (): Configuration => {
   const config: Configuration = {
+    entry: NODE_ENV === 'development' ? './src/main.tsx' : './src/components/entry.tsx',
     mode: 'development',
-    entry: {
-      index: './src/main.tsx', // 导出生命周期的 js 需要放在最后
-    },
-    // externals: {
-    //   react: 'React',
-    //   'react-dom': 'ReactDOM',
-    // },
+    devtool: 'source-map',
     output: {
-      // filename: 'static/[name]_[hash:8].js',
-      // path: path.resolve(__dirname, '../dist'),
-      publicPath: '/',
+      filename: 'index.min.js',
+      path: path.resolve(__dirname, '../main/public/react16'),
+      publicPath: NODE_ENV === 'development' ? '/' : 'http://localhost:7001/react16/',
+      globalObject: 'window',
+      library: 'React16Blocks',
+      libraryExport: 'default',
+      libraryTarget: 'umd',
     },
     resolve: {
       modules: ['node_modules'],
       alias: {
-        '@': path.resolve(__dirname, '../src/'),
+        '@': path.resolve(__dirname, './src/'),
       },
-      extensions: ['.js', '.jsx', '.ts', '.tsx', '.css', '.less', '.scss'],
+      extensions: ['.js', '.jsx', '.ts', '.tsx', '.css', '.less'],
     },
     devServer: {
       port: 7003,
-      // historyApiFallback: true, // 需要与 publicPath: '/', 配合使用，404指向 index.html
-      // headers: {
-      //   'Access-Control-Allow-Origin': '*',
-      // },
-      // hot: true,
-
       disableHostCheck: true,
       historyApiFallback: true,
       headers: {
@@ -53,15 +56,11 @@ export default (): Configuration => {
           loader: 'babel-loader',
         },
         {
-          test: /\.css$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            'css-loader'],
-        },
-        {
           test: /\.less$/,
           use: [
-            MiniCssExtractPlugin.loader,
+            {
+              loader: MiniCssExtractPlugin.loader,
+            },
             'css-loader',
             {
               loader: 'less-loader',
@@ -94,16 +93,17 @@ export default (): Configuration => {
       ],
     },
     plugins: [
+      new CleanWebpackPlugin({}),
       new HtmlWebpackPlugin({
         template: './public/index.html',
-        filename: 'index.html', //打包后的文件名
-        inject: 'body', // 指定 js 插入位置
+        filename: 'index.html',
+        inject: 'body',
       }),
       new MiniCssExtractPlugin({
-        filename: 'static/[name].[hash:8].css',
-        chunkFilename: 'static/[name].[hash:8].css',
+        filename: '[name].[hash:8].css',
+        chunkFilename: '[name].[hash:8].css',
       }),
-      new CleanWebpackPlugin({}),
+      ...plugins
     ],
   };
 

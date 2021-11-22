@@ -7,7 +7,7 @@ import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-serv
 
 
 import { TenonWebpackPlugin } from 'tenon-webpack-plugin'
-import { externals, cdnFiles } from './externals';
+import { externals, cdnFiles } from '../externals';
 
 interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;

@@ -1,19 +1,18 @@
 {
-  "name": "tenon-example-main",
+  "name": "tenon-example-react16",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch",
-    "start": "cross-env NODE_ENV=development webpack-dev-server --open --config ./build/webpack.config.ts",
-    "build": "cross-env NODE_ENV=production webpack --config ./build/webpack.components.config.ts"
+    "start": "cross-env NODE_ENV=development webpack-dev-server --open --config ./webpack.config.ts",
+    "build": "cross-env NODE_ENV=production webpack --config ./webpack.config.ts"
   },
   "author": "panmenglin <max.pan@outlook.com>",
   "license": "ISC",
   "dependencies": {
     "@ant-design/charts": "^1.2.14",
-    "ahooks": "^2.10.11",
     "antd": "^4.16.13",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
