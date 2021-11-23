@@ -1,34 +1,34 @@
 export const Config = {
   col: [
     {
-      key: '用户信息',
+      key: 'UserInfo',
       span: 24,
       blocks: [{
-        name: '用户信息',
+        name: 'UserInfo',
         key: 'UserInfo',
         import: 'http://localhost:7001/react17/entry.json',
       }],
     },
     {
-      key: '折线图',
-      span: 24,
+      key: 'LineChart - React17',
+      span: 12,
       blocks: [{
         name: 'react17/antd/@ant-design/charts',
-        key: 'ChartLine',
+        key: 'LineChart',
         import: 'http://localhost:7001/react17/entry.json',
       }],
     },
     {
-      key: '折线图22',
-      span: 24,
+      key: 'LineChart - React16',
+      span: 12,
       blocks: [{
         name: 'react16/antd/@ant-design/charts',
-        key: 'ChartLine',
+        key: 'LineChart',
         import: 'http://localhost:7001/react16/entry.json',
       }],
     },
     {
-      key: '折线图vue3',
+      key: 'LineChart - Vue3',
       span: 12,
       blocks: [{
         name: 'vue3/ant-design-vue/echarts',
@@ -37,7 +37,7 @@ export const Config = {
       }],
     },
     {
-      key: '饼图 vue',
+      key: 'PieChart - Vue',
       span: 12,
       blocks: [{
         name: 'vue/iview/vue-echarts',

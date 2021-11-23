@@ -40,7 +40,7 @@ export const UserInfo: FC = (props: Props) => {
       </div>
       <div>
         <div className="user-info-title">
-          {userInfo?.userName}，欢迎回到工作台
+          {userInfo?.userName}
         </div>
         <div className="user-info-info">
           {userInfo?.positionName || '-'}

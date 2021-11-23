@@ -6,9 +6,9 @@ import { History } from 'history';
 import { match } from 'react-router';
 
 import { UserInfo } from '@/components/user-info';
-import { ChartLine } from '@/components/chart-line';
+import { LineChart } from '@/components/line-chart';
 
-import './demo.less';
+import './index.less';
 
 type Props = {
   history: History;
@@ -29,7 +29,7 @@ export const Demo: FC = (props: Props) => {
           <UserInfo></UserInfo>
         </Col>
         <Col span={24}>
-          <ChartLine></ChartLine>
+          <LineChart></LineChart>
         </Col>
       </Row>
     </div>

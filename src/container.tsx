@@ -84,7 +84,7 @@ export const TenonContainer = (props: Props): ReactElement => {
             onGlobalStateChange: globalState.onChange,
             setGlobalState: globalState.set,
             getGlobalState: globalState.get,
-          },
+          }
         )
       ) : (
         <RenderFn
@@ -96,14 +96,14 @@ export const TenonContainer = (props: Props): ReactElement => {
         />
       );
     },
-    [history, shadowDom],
+    [history, shadowDom]
   );
 
   return (
     <div
       className={`block-container ${asyncBlock ? 'async-block' : ''}`}
       style={{
-        minHeight: !loaded ? '200px' : 'initial',
+        height: !loaded ? '200px' : '100%',
         ...style,
       }}
     >

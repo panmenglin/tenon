@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useCallback, useState } from 'react';
+import React, { FC, ReactNode, useCallback, useState, useEffect } from 'react';
 import { Row, Col } from 'antd';
 
 // types
@@ -6,7 +6,7 @@ import { History } from 'history';
 import { match } from 'react-router';
 
 // utils
-import { TenonContainer } from '../../../../src';
+import { TenonContainer, globalState } from '../../../../../src';
 
 import './index.less'
 
@@ -23,7 +23,7 @@ type Props = {
  * 工作台
  * @returns
  */
-export const Page: FC = (props: Props) => {
+export const SubAppPage: FC = (props: Props) => {
   const [config, setConfig] = useState(Config);
 
   /**

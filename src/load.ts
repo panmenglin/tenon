@@ -106,6 +106,7 @@ export const load = async ({
 
 const ElementPrototype = ['appendChild', 'removeChild'];
 const DocumentFragmentPrototype = ['getElementById'];
+const WindowPrototype = ['addEventListener', 'removeEventListener'];
 const Unscopables = ['Object', 'Reflect', 'Array', 'Function', 'Boolean', 'Symbol', 'Error', 'Promise', 'ResizeObserver'];
 
 /**
@@ -179,7 +180,8 @@ export const mount = async ({
     tenonMap[item.library].sandbox.active();
 
     const proxyWindow = tenonMap[item.library].sandbox.proxy;
-    proxyWindow.body = item.root()
+
+    // 解决主子应用 window 间差异性问题
 
     Unscopables.map((key: any) => {
       proxyWindow.window[key] = window[key]
@@ -198,7 +200,7 @@ export const mount = async ({
     })
 
     DocumentFragmentPrototype.map((key: string) => {
-      proxyWindow.window.Document.prototype.getElementById = function (...args: [any]) {
+      proxyWindow.window.Document.prototype[key] = function (...args: [any]) {
         if (this instanceof proxyWindow.window.Document) {
           // @ts-ignore
           return DocumentFragment.prototype[key].apply(proxyWindow.body, args)
@@ -208,28 +210,33 @@ export const mount = async ({
       }
     })
 
-    proxyWindow.window.Window.prototype.addEventListener = function (...args: any) {
-      return Window.prototype.addEventListener.apply(window, args)
-    }
+    WindowPrototype.map((key: string) => {
+      proxyWindow.window.Window.prototype[key] = function (...args: any) {
+        // @ts-ignore
+        return Window.prototype[key].apply(window, args)
+      }
+    })
 
-    proxyWindow.window.Window.prototype.removeEventListener = function (...args: any) {
-      return Window.prototype.removeEventListener.apply(window, args)
-    }
-
-    // proxyWindow.window.ResizeObserver = undefined
-    // proxyWindow.window.MutationObserver = undefined
+    Object.defineProperty(proxyWindow.window, 'history', {
+      get: function () {
+        return history;
+      }
+    });
   }
 
   const proxyWindow = tenonMap[item.library].sandbox.proxy;
+  proxyWindow.body = item.root()
 
   tenonMap[item.library].run = tenonMap[item.library].run || createEvalScripts(jsFiles).bind(proxyWindow.window);
   tenonMap[item.library].styles = tenonMap[item.library].styles || cssFiles
 
   try {
-    tenonMap[item.library].run(
-      proxyWindow.window,
-      proxyWindow.window.document,
-    );
+    tenonMap[item.library].run({
+      window: proxyWindow.window,
+      document: proxyWindow.window.document,
+      history,
+      location
+    });
   } catch (error) {
     console.error(error)
   }

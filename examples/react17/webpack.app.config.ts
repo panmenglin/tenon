@@ -17,7 +17,7 @@ const { NODE_ENV } = process.env;
 
 const plugins = NODE_ENV === 'development' ? [] : [
   new TenonWebpackPlugin({
-    blocks: ["UserInfo", "LineChart"],
+    blocks: ["React17App"],
     externals: {
       js: cdnFiles.js,
       css: cdnFiles.css,
@@ -27,15 +27,15 @@ const plugins = NODE_ENV === 'development' ? [] : [
 
 export default (): Configuration => {
   const config: Configuration = {
-    entry: NODE_ENV === 'development' ? './src/main.tsx' : './src/components/entry.tsx',
+    entry: NODE_ENV === 'development' ? './src/main.tsx' : './src/entry.tsx',
     mode: 'development',
     devtool: 'source-map',
     output: {
       filename: 'static/[name]_[hash:8].js',
-      path: path.resolve(__dirname, '../main/public/react17'),
-      publicPath: NODE_ENV === 'development' ? '/' : 'http://localhost:7001/react17/',
+      path: path.resolve(__dirname, '../main/public/react17App'),
+      publicPath: NODE_ENV === 'development' ? '/' : 'http://localhost:7001/react17App/',
       globalObject: 'window',
-      library: 'React17Blocks',
+      library: 'react17AppBlocks',
       libraryExport: 'default', // 对应 ./index.ts 中导出的变量
       libraryTarget: 'umd', // 暴露全局变量
     },

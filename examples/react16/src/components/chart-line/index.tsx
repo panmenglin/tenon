@@ -9,7 +9,7 @@ export type Props = {
   children?: ReactNode;
 };
 
-export const ChartLine: FC = (props: Props) => {
+export const LineChart: FC = (props: Props) => {
   var data = [
     {
       year: '1991',

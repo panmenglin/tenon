@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ConfigProvider } from 'antd';
 import { UserInfo } from './user-info';
-import { ChartLine } from './chart-line';
+import { LineChart } from './line-chart';
 
 import zhCN from 'antd/lib/locale/zh_CN';
 
@@ -15,10 +15,10 @@ const mount = {
       el,
     );
   },
-  ChartLine: (el: HTMLElement, props: any): void => {
+  LineChart: (el: HTMLElement, props: any): void => {
     ReactDOM.render(
       <ConfigProvider locale={zhCN}>
-        <ChartLine {...props}></ChartLine>
+        <LineChart {...props}></LineChart>
       </ConfigProvider>,
       el,
     );

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" id="fff">
     <div class="filter">
       <Select v-model="model1" style="width: 200px; margin-right: 10px;">
         <Option
@@ -11,7 +11,7 @@
       </Select>
       <Button type="primary" @click="info">Display info prompt</Button>
     </div>
-    <v-chart class="chart" :option="option" autoresize />
+    <v-chart id="ffchart" class="chart" :option="option" autoresize />
     <div ref="root"></div>
   </div>
 </template>
@@ -138,7 +138,8 @@ export default {
 }
 
 .chart {
-  width: 500px;
+  display: block;
+  width: 100%;
   height: 300px;
 }
 </style>
