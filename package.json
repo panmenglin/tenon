@@ -1,6 +1,6 @@
 {
   "name": "tenon-maker",
-  "version": "1.1.3",
+  "version": "1.1.5",
   "author": "panmenglin <max.pan@outlook.com>",
   "description": "A implementation of Micro Frontends",
   "homepage": "",
@@ -32,7 +32,7 @@
     "lint": "eslint --ext .js,.ts .",
     "lint.fix": "eslint --ext .js,.ts --fix .",
     "typescript": "tsc",
-    "build": "npm run clean && tsc -p tsconfig.lib.json && tsc -p tsconfig.declaration.json && cp src/*.less lib/ && cp src/*.less module/",
+    "build": "npm run clean && tsc -p tsconfig.lib.json && tsc -p tsconfig.declaration.json && cp src/*.less lib/",
     "install:all": "npm run install:main && npm run install:react16 && npm run install:react17 && npm run install:vue && npm run install:vue3",
     "build:examples": "npm run build:react16 && npm run build:react17 && npm run build:react17-app && npm run build:vue && npm run build:vue3",
     "install:main": "cd examples/main && yarn",
