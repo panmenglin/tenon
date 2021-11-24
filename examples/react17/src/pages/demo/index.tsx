@@ -26,7 +26,7 @@ export const Demo: FC = (props: Props) => {
     <div className="container">
       <Row gutter={[46, 16]}>
         <Col span={24}>
-          <UserInfo></UserInfo>
+          <UserInfo {...props}></UserInfo>
         </Col>
         <Col span={24}>
           <LineChart></LineChart>

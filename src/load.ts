@@ -104,17 +104,18 @@ export const load = async ({
   }
 }
 
-const ElementPrototype = ['appendChild', 'removeChild'];
-const DocumentFragmentPrototype = ['getElementById'];
-const WindowPrototype = ['addEventListener', 'removeEventListener'];
-const Unscopables = ['Object', 'Reflect', 'Array', 'Function', 'Boolean', 'Symbol', 'Error', 'Promise', 'ResizeObserver'];
+const ELEMENTPROTOTYPE = ['appendChild', 'removeChild', 'querySelector', 'querySelectorAll'] as const;
+const DOCUMENTFRAGMENTPROTOTYPE = ['getElementById'] as const;
+const DOCUMENTPROTOTYPE = ['querySelector', 'querySelectorAll'] as const;
+const WINDOWPROTOTYPE = ['addEventListener', 'removeEventListener'] as const;
+const UNSCOPABLES = ['Object', 'Reflect', 'Array', 'Function', 'Boolean', 'Symbol', 'Error', 'Promise', 'ResizeObserver', 'history'] as const;
 
 /**
  * 加载模块资源
  * @param item
  * @param callback
  */
-export const mount = async ({
+const mount = async ({
   item,
 }: { item: Resource }): Promise<void> => {
 
@@ -183,12 +184,16 @@ export const mount = async ({
 
     // 解决主子应用 window 间差异性问题
 
-    Unscopables.map((key: any) => {
-      proxyWindow.window[key] = window[key]
+    UNSCOPABLES.map((key: any) => {
+      Object.defineProperty(proxyWindow.window, key, {
+        get: function () {
+          return window[key];
+        }
+      });
     })
 
     // 重写部分 dom 操作方法，解决组件中在 body 挂载/操作 dom 的问题
-    ElementPrototype.map((key: string) => {
+    ELEMENTPROTOTYPE.map((key: string) => {
       proxyWindow.window.Element.prototype[key] = function (...args: [node: any]) {
         if (this.tagName === 'BODY') {
           // @ts-ignore
@@ -199,7 +204,7 @@ export const mount = async ({
       };
     })
 
-    DocumentFragmentPrototype.map((key: string) => {
+    DOCUMENTFRAGMENTPROTOTYPE.map((key: string) => {
       proxyWindow.window.Document.prototype[key] = function (...args: [any]) {
         if (this instanceof proxyWindow.window.Document) {
           // @ts-ignore
@@ -210,18 +215,23 @@ export const mount = async ({
       }
     })
 
-    WindowPrototype.map((key: string) => {
+    DOCUMENTPROTOTYPE.map((key: string) => {
+      proxyWindow.window.Document.prototype[key] = function (...args: [any]) {
+        if (this instanceof proxyWindow.window.Document) {
+          // @ts-ignore
+          return Document.prototype[key].apply(document, args)
+        }
+        // @ts-ignore
+        return Document.prototype[key].apply(this, args)
+      }
+    })
+
+    WINDOWPROTOTYPE.map((key: string) => {
       proxyWindow.window.Window.prototype[key] = function (...args: any) {
         // @ts-ignore
         return Window.prototype[key].apply(window, args)
       }
     })
-
-    Object.defineProperty(proxyWindow.window, 'history', {
-      get: function () {
-        return history;
-      }
-    });
   }
 
   const proxyWindow = tenonMap[item.library].sandbox.proxy;
@@ -233,9 +243,6 @@ export const mount = async ({
   try {
     tenonMap[item.library].run({
       window: proxyWindow.window,
-      document: proxyWindow.window.document,
-      history,
-      location
     });
   } catch (error) {
     console.error(error)

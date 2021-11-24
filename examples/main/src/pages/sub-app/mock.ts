@@ -4,7 +4,7 @@ export const Config = {
       key: 'React17App',
       span: 24,
       blocks: [{
-        name: 'React17App',
+        name: 'react17,react-router-dom,antd,@ant-design/charts',
         key: 'React17App',
         import: 'http://localhost:7001/react17App/entry.json',
       }],

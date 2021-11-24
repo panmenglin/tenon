@@ -25,7 +25,6 @@ import { TenonBlock } from './type';
 type Props = {
   block: TenonBlock;
   style?: CSSProperties;
-  history: History;
   data?: Record<string, string>;
   mode?: 'development' | 'production';
 };
@@ -79,7 +78,6 @@ export const TenonContainer = (props: Props): ReactElement => {
         RenderFn(
           shadowDom?.current?.shadowRoot.querySelectorAll('.render-root')[0],
           {
-            history: history,
             ..._props,
             onGlobalStateChange: globalState.onChange,
             setGlobalState: globalState.set,
@@ -88,7 +86,6 @@ export const TenonContainer = (props: Props): ReactElement => {
         )
       ) : (
         <RenderFn
-          history={history}
           {..._props}
           onGlobalStateChange={globalState.onChange}
           setGlobalState={globalState.set}

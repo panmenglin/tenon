@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Layout } from 'antd';
 const { Content, Footer } = Layout;
 import { History } from 'history';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 import { IndexPage } from './pages/index';
 import { SubAppPage } from './pages/sub-app';
@@ -37,6 +37,9 @@ export const App: FC<Props> = () => {
               <Switch>
                 <Route path="/index" component={IndexPage} />
                 <Route path="/react17" component={SubAppPage} />
+
+                <Redirect from="*" to={`/index`} />
+
               </Switch>
             </Content>
           </Layout>

@@ -6,7 +6,7 @@
 export const createEvalScripts = (codes: string[]): any => {
   return new Function(
     `
-      return function({window, document, history, location}){
+      return function({window}){
         with(window) {
           ${codes.join('\n').replaceAll('window.location', 'parent.location')}
         }

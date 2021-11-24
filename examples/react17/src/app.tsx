@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import React, { FC, useLayoutEffect } from 'react';
 import { Space } from 'antd';
 import { History } from 'history';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import { IndexPage } from './pages/index';
@@ -14,6 +14,21 @@ interface Props {
 export const App: FC<Props> = (props) => {
   console.log(props);
 
+  useLayoutEffect(() => {
+
+    console.log(document.querySelector('body'))
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      console.log(123)
+    });
+
+    resizeObserver.observe(document.querySelector('body'));
+
+    return () => {
+      resizeObserver.unobserve(document.querySelector('body'));
+    };
+  }, []);
+
   return (
     <BrowserRouter>
       <div>React17</div>
@@ -25,7 +40,9 @@ export const App: FC<Props> = (props) => {
 
       <Switch>
         <Route path="/react17/index" component={IndexPage} />
-        <Route path="/react17/demo" component={Demo} />
+        <Route path="/react17/demo" component={() => Demo(props)} />
+
+        <Redirect from="*" to={`/react17/index`} />
       </Switch>
     </BrowserRouter>
   );

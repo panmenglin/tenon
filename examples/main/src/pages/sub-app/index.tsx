@@ -47,7 +47,6 @@ export const SubAppPage: FC = (props: Props) => {
                     style={{
                       ...item.style,
                     }}
-                    history={props.history}
                     data={{
                       ...block.props,
                     }}

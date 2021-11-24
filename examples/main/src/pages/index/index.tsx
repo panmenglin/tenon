@@ -8,9 +8,9 @@ import { match } from 'react-router';
 // utils
 import { TenonContainer, globalState } from '../../../../../src';
 
-import './index.less'
+import './index.less';
 
-import { Config } from './mock'
+import { Config } from './mock';
 
 type Props = {
   history: History;
@@ -27,15 +27,17 @@ export const IndexPage: FC = (props: Props) => {
   const [config, setConfig] = useState(Config);
 
   useEffect(() => {
-    globalState.set({
-      userInfo: {
-        headImage: null,
-        userName: 'MSX.Pan',
-        positionName: 'Front-end Engineer',
-        orgName: ''
-      },
-    })
-  }, [])
+    setTimeout(() => {
+      globalState.set({
+        userInfo: {
+          headImage: null,
+          userName: 'MSX.Pan',
+          positionName: 'Front-end Engineer',
+          orgName: '',
+        },
+      });
+    }, 1500);
+  }, []);
 
   /**
    * 栅格内容 Render
@@ -58,7 +60,6 @@ export const IndexPage: FC = (props: Props) => {
                     style={{
                       ...item.style,
                     }}
-                    history={props.history}
                     data={{
                       ...block.props,
                     }}
