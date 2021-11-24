@@ -7,7 +7,6 @@ declare const _default: {
     TenonContainer: (props: {
         block: TenonBlock;
         style?: import("react").CSSProperties | undefined;
-        history: import("history").History;
         data?: Record<string, string> | undefined;
         mode?: "development" | "production" | undefined;
     }) => import("react").ReactElement<any, string | import("react").JSXElementConstructor<any>>;

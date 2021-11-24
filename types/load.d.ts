@@ -35,12 +35,4 @@ export declare const blockRender: (key: string) => (() => HTMLElement);
  * @param param0
  */
 export declare const load: ({ config, callback, root, }: EntryConfigParams) => Promise<void>;
-/**
- * 加载模块资源
- * @param item
- * @param callback
- */
-export declare const mount: ({ item, }: {
-    item: Resource;
-}) => Promise<void>;
 export {};

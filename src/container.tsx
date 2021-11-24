@@ -19,7 +19,6 @@ import './index.less';
 import { globalState } from './index';
 
 // types
-import { History } from 'history';
 import { TenonBlock } from './type';
 
 type Props = {
@@ -30,7 +29,7 @@ type Props = {
 };
 
 export const TenonContainer = (props: Props): ReactElement => {
-  const { block, style, data, history, mode = 'production' } = props;
+  const { block, style, data, mode = 'production' } = props;
 
   const shadowDom: any = useRef(null);
 
@@ -93,7 +92,7 @@ export const TenonContainer = (props: Props): ReactElement => {
         />
       );
     },
-    [history, shadowDom]
+    [shadowDom]
   );
 
   return (
