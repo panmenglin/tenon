@@ -67,12 +67,6 @@ export const load = async ({
 }: EntryConfigParams): Promise<void> => {
 
   if (typeof config.import === 'string') {
-    if (!document.getElementById('iframeContainer')) {
-      const iframeContainer = document.createElement('div')
-      iframeContainer.id = 'iframeContainer'
-      iframeContainer.style.display = 'none'
-      document.body.appendChild(iframeContainer)
-    }
 
     if (!tasks[config.import]) {
       tasks[config.import] = []
@@ -103,12 +97,6 @@ export const load = async ({
     callback(config.key);
   }
 }
-
-const ELEMENTPROTOTYPE = ['appendChild', 'removeChild', 'querySelector', 'querySelectorAll'] as const;
-const DOCUMENTFRAGMENTPROTOTYPE = ['getElementById'] as const;
-const DOCUMENTPROTOTYPE = ['querySelector', 'querySelectorAll'] as const;
-const WINDOWPROTOTYPE = ['addEventListener', 'removeEventListener'] as const;
-const UNSCOPABLES = ['Object', 'Reflect', 'Array', 'Function', 'Boolean', 'Symbol', 'Error', 'Promise', 'ResizeObserver', 'history'] as const;
 
 /**
  * 加载模块资源
@@ -165,73 +153,11 @@ const mount = async ({
   // 相同 library 复用已有沙箱
   if (!tenonMap[item.library].sandbox) {
 
-    // 创建 window
-    const _window = document.createElement('iframe')
-    _window.id = item.library
-    document.getElementById('iframeContainer')!.appendChild(_window);
-
-    const context = {
-      window: _window.contentWindow,
-    };
-
     tenonMap[item.library].sandbox = new MultipleProxySandbox(
       item.library,
-      context,
     );
     tenonMap[item.library].sandbox.active();
 
-    const proxyWindow = tenonMap[item.library].sandbox.proxy;
-
-    // 解决主子应用 window 间差异性问题
-
-    UNSCOPABLES.map((key: any) => {
-      Object.defineProperty(proxyWindow.window, key, {
-        get: function () {
-          return window[key];
-        }
-      });
-    })
-
-    // 重写部分 dom 操作方法，解决组件中在 body 挂载/操作 dom 的问题
-    ELEMENTPROTOTYPE.map((key: string) => {
-      proxyWindow.window.Element.prototype[key] = function (...args: [node: any]) {
-        if (this.tagName === 'BODY') {
-          // @ts-ignore
-          return Element.prototype[key].apply(proxyWindow.body, args);
-        }
-        // @ts-ignore
-        return Element.prototype[key].apply(this, args);
-      };
-    })
-
-    DOCUMENTFRAGMENTPROTOTYPE.map((key: string) => {
-      proxyWindow.window.Document.prototype[key] = function (...args: [any]) {
-        if (this instanceof proxyWindow.window.Document) {
-          // @ts-ignore
-          return DocumentFragment.prototype[key].apply(proxyWindow.body, args)
-        }
-        // @ts-ignore
-        return Document.prototype[key].apply(this, args)
-      }
-    })
-
-    DOCUMENTPROTOTYPE.map((key: string) => {
-      proxyWindow.window.Document.prototype[key] = function (...args: [any]) {
-        if (this instanceof proxyWindow.window.Document) {
-          // @ts-ignore
-          return Document.prototype[key].apply(document, args)
-        }
-        // @ts-ignore
-        return Document.prototype[key].apply(this, args)
-      }
-    })
-
-    WINDOWPROTOTYPE.map((key: string) => {
-      proxyWindow.window.Window.prototype[key] = function (...args: any) {
-        // @ts-ignore
-        return Window.prototype[key].apply(window, args)
-      }
-    })
   }
 
   const proxyWindow = tenonMap[item.library].sandbox.proxy;
