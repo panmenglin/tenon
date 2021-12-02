@@ -1,5 +1,6 @@
 import React, { FC, ReactNode, useCallback, useState, useEffect } from 'react';
 import { Row, Col } from 'antd';
+import { observer } from 'mobx-react-lite';
 
 // types
 import { History } from 'history';
@@ -10,7 +11,7 @@ import { TenonContainer, globalState } from '../../../../../src';
 
 import './index.less';
 
-import { Config } from './mock';
+import { indexConfig } from '@/setting';
 
 type Props = {
   history: History;
@@ -23,10 +24,14 @@ type Props = {
  * 工作台
  * @returns
  */
-export const IndexPage: FC = (props: Props) => {
-  const [config, setConfig] = useState(Config);
+export const IndexPage: FC = observer((props: Props) => {
+  const [config, setConfig] = useState<Record<string, string>>();
 
   useEffect(() => {
+
+    // fetchConfig();
+    setConfig(indexConfig.value);
+
     setTimeout(() => {
       globalState.set({
         userInfo: {
@@ -37,7 +42,7 @@ export const IndexPage: FC = (props: Props) => {
         },
       });
     }, 1500);
-  }, []);
+  }, [indexConfig.value]);
 
   /**
    * 栅格内容 Render
@@ -55,7 +60,8 @@ export const IndexPage: FC = (props: Props) => {
               if (block.import) {
                 return (
                   <TenonContainer
-                    key={item.key}
+                    // key={item.key}
+                    key={`${block.key} - ${block.import}`}
                     block={block}
                     style={{
                       ...item.style,
@@ -80,7 +86,7 @@ export const IndexPage: FC = (props: Props) => {
 
   return (
     <div className="container">
-      <Row gutter={[18, 18]}>{colRender(config.col)}</Row>
+      <Row gutter={[18, 18]}>{colRender(config?.col || [])}</Row>
     </div>
   );
-};
+});

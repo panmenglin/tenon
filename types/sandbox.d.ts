@@ -4,7 +4,7 @@
 export declare class MultipleProxySandbox {
     sandboxRunning: boolean;
     name: string;
-    proxy: any;
+    proxy: Window | null;
     active(): void;
     inactive(): void;
     /**

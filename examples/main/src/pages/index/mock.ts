@@ -6,8 +6,8 @@ export const Config = {
       blocks: [{
         name: 'react17,antd',
         key: 'UserInfo',
-        import: 'http://localhost:7001/react17/entry.json',
-      }],
+        import: 'http://localhost:7001/react17/entry.json'
+      }]
     },
     {
       key: 'LineChart - React17',
@@ -15,8 +15,8 @@ export const Config = {
       blocks: [{
         name: 'react17,antd,@ant-design/charts',
         key: 'LineChart',
-        import: 'http://localhost:7001/react17/entry.json',
-      }],
+        import: 'http://localhost:7001/react17/entry.json'
+      }]
     },
     {
       key: 'LineChart - React16',
@@ -24,8 +24,8 @@ export const Config = {
       blocks: [{
         name: 'react16,antd,@ant-design/charts',
         key: 'LineChart',
-        import: 'http://localhost:7001/react16/entry.json',
-      }],
+        import: 'http://localhost:7001/react16/entry.json'
+      }]
     },
     {
       key: 'LineChart - Vue3',
@@ -33,8 +33,8 @@ export const Config = {
       blocks: [{
         name: 'vue3,ant-design-vue,echarts',
         key: 'LineChart',
-        import: 'http://localhost:7001/vue3/entry.json',
-      }],
+        import: 'http://localhost:7001/vue3/entry.json'
+      }]
     },
     {
       key: 'PieChart - Vue',
@@ -42,8 +42,8 @@ export const Config = {
       blocks: [{
         name: 'vue,iview,vue-echarts',
         key: 'PieChart',
-        import: 'http://localhost:7001/vue/entry.json',
-      }],
-    },
-  ],
+        import: 'http://localhost:7001/vue/entry.json'
+      }]
+    }
+  ]
 }

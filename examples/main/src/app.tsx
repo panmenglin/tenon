@@ -7,6 +7,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 import { IndexPage } from './pages/index';
 import { SubAppPage } from './pages/sub-app';
+import { Setting } from './setting';
 
 interface Props {
   history: History;
@@ -44,6 +45,7 @@ export const App: FC<Props> = () => {
             </Content>
           </Layout>
         </Layout>
+        <Setting />
       </Layout>
     </BrowserRouter>
   );

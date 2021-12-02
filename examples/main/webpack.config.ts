@@ -112,7 +112,7 @@ export default (): Configuration => {
       }),
       new webpack.DefinePlugin({
         __DEVTOOL: NODE_ENV === 'development' ? true : false,
-      }),
+      })
     ]
   }
   return config

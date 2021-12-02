@@ -124,16 +124,19 @@ Tenon 在设计初的主要目的就是进行多区块的页面拼装，在挂�
 根目录执行命令进行，依赖的安装和示例区块的打包。
 
 1、安装依赖
+
 ```
 npm run install:all
 ```
 
 2、打包区块
+
 ```
 npm run build:examples
 ```
 
 3、启动基座
+
 ```
 npm run start:main
 ```
@@ -245,13 +248,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Todo } from './todo';
 
-const mount = {
-  Todo: (el, props) => {
-    ReactDOM.render(<Todo {...props}></Todo>, el);
+const blocks = {
+  Todo: {
+    mount: (el, props) => {
+      ReactDOM.render(<Todo {...props}></Todo>, el);
+    },
   },
 };
 
-export default mount;
+export default blocks;
 ```
 
 ```javascript
@@ -260,15 +265,17 @@ export default mount;
 import Vue from 'vue';
 import { default as Todo } from './todo';
 
-const mount = {
-  TodoList: (el, props) => {
-    new Vue({
-      render: (h) => h(Todo),
-    }).$mount(el);
+const blocks = {
+  Todo: {
+    mount: (el, props) => {
+      new Vue({
+        render: (h) => h(Todo),
+      }).$mount(el);
+    },
   },
 };
 
-export default mount;
+export default blocks;
 ```
 
 2、打包输出 `umd` 格式, `webpack` 配置如下：

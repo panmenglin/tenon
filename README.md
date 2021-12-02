@@ -251,13 +251,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Todo } from './todo';
 
-const mount = {
-  Todo: (el, props) => {
-    ReactDOM.render(<Todo {...props}></Todo>, el);
-  }
+const blocks = {
+  Todo: {
+    mount: (el, props) => {
+      ReactDOM.render(<Todo {...props}></Todo>, el);
+    },
+  },
 };
 
-export default mount;
+export default blocks;
 ```
 
 ```javascript
@@ -266,15 +268,17 @@ export default mount;
 import Vue from 'vue';
 import { default as Todo } from './todo';
 
-const mount = {
-  TodoList: (el, props) => {
-    new Vue({
-      render: (h) => h(Todo),
-    }).$mount(el);
+const blocks = {
+  Todo: {
+    mount: (el, props) => {
+      new Vue({
+        render: (h) => h(Todo),
+      }).$mount(el);
+    },
   },
 };
 
-export default mount;
+export default blocks;
 ```
 
 2、Packaged output `umd` format, `webpack` configuration is as follows:

@@ -16,12 +16,20 @@ Vue.use(ViewUI);
 use([CanvasRenderer, BarChart, GridComponent, TooltipComponent]);
 Vue.component('v-chart', ECharts);
 
-const mount = {
-  PieChart: (el) => {
-    new Vue({
-      render: (h) => h(ChartPie),
-    }).$mount(el);
+let instance = null;
+
+const blocks = {
+  PieChart: {
+    mount: (el) => {
+      instance = new Vue({
+        render: (h) => h(ChartPie),
+      }).$mount(el);
+    },
+    unmount: () => {
+      instance.$destroy();
+      instance.$el.innerHTML = '';
+    }
   },
 };
 
-export default mount;
+export default blocks;

@@ -2,39 +2,6 @@
  * 多实例沙箱
  */
 
-// const CannotBeCalled: string[] = [
-//   'ArrayBuffer',
-//   'FormData',
-//   'DataView',
-//   'FileReader',
-//   'Float32Array',
-//   'Float64Array',
-//   'Audio',
-//   'Image',
-//   'Option',
-//   'Int16Array',
-//   'Int32Array',
-//   'Int8Array',
-//   'MessageChannel',
-//   'MutationObserver',
-//   'SharedWorker',
-//   'Uint16Array',
-//   'Uint32Array',
-//   'Uint8Array',
-//   'WebKitCSSMatrix',
-//   'WebKitPoint',
-//   'WebSocket',
-//   'Worker',
-//   'XMLHttpRequest',
-//   'XSLTProcessor',
-// ];
-
-// const SandboxKeys: string[] = [
-//   '__mobxGlobals',
-//   '__mobxInstanceCount',
-// ]
-
-
 const elementPrototype = ['appendChild', 'removeChild', 'querySelector', 'querySelectorAll'] as const;
 const documentFragmentPrototype = ['getElementById'] as const;
 const documentPrototype = ['querySelector', 'querySelectorAll'] as const;
@@ -53,6 +20,7 @@ const changeFakeWindowPropertype = (fakeWindow: Window) => {
 
   // 重写部分 dom 操作方法，解决组件中在 body 挂载/操作 dom 的问题
   elementPrototype.map((key: string) => {
+    // @ts-ignore
     fakeWindow.Element.prototype[key] = function (...args: [node: any]) {
       if (this.tagName === 'BODY') {
         // @ts-ignore
@@ -64,7 +32,9 @@ const changeFakeWindowPropertype = (fakeWindow: Window) => {
   })
 
   documentFragmentPrototype.map((key: string) => {
+    // @ts-ignore
     fakeWindow.Document.prototype[key] = function (...args: [any]) {
+      // @ts-ignore
       if (this instanceof fakeWindow.Document) {
         // @ts-ignore
         return DocumentFragment.prototype[key].apply(fakeWindow.body, args)
@@ -75,7 +45,9 @@ const changeFakeWindowPropertype = (fakeWindow: Window) => {
   })
 
   documentPrototype.map((key: string) => {
+    // @ts-ignore
     fakeWindow.Document.prototype[key] = function (...args: [any]) {
+      // @ts-ignore
       if (this instanceof fakeWindow.Document) {
         // @ts-ignore
         return Document.prototype[key].apply(document, args)
@@ -86,6 +58,7 @@ const changeFakeWindowPropertype = (fakeWindow: Window) => {
   })
 
   windowPrototype.map((key: string) => {
+    // @ts-ignore
     fakeWindow.Window.prototype[key] = function (...args: any) {
       // @ts-ignore
       return Window.prototype[key].apply(window, args)
@@ -101,7 +74,9 @@ const createFakeWindow = (name: string) => {
   document.body.appendChild(iframe);
 
   const fakeWindow = iframe.contentWindow
-  changeFakeWindowPropertype(fakeWindow)
+  if (fakeWindow) {
+    changeFakeWindowPropertype(fakeWindow)
+  }
 
   return {
     fakeWindow
@@ -142,10 +117,13 @@ export class MultipleProxySandbox {
     const proxy = new Proxy(fakeWindow, {
       set: (target, key: PropertyKey, value) => {
         if (this.sandboxRunning) {
+          // @ts-ignore
           if (fakeWindow[key]) {
+            // @ts-ignore
             context[key] = value;
           }
 
+          // @ts-ignore
           target[key] = value;
         }
 
@@ -156,10 +134,13 @@ export class MultipleProxySandbox {
         if (key === Symbol.unscopables) return unscopables;
 
 
+        // @ts-ignore
         if (fakeWindow[key]) {
+          // @ts-ignore
           return fakeWindow[key]
         }
 
+        // @ts-ignore
         return target[key];
       },
     })

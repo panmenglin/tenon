@@ -42,11 +42,20 @@ const blockSandboxMapping: Record<string, any> = {} as const; // 组件和沙箱
 const entryMap: Record<string, any> = {} as const;
 
 // 返回组件渲染方法
-export const blockRender = (key: string): (() => HTMLElement) => {
+export const blockLifeCycle = (key: string): {
+  mount: (el: HTMLElement, props: Record<string, any>) => HTMLElement,
+  unmount: (el: HTMLElement) => void,
+} => {
   const library = blockSandboxMapping[key]
   const sandboxWindow = tenonMap[library].sandbox?.proxy.window;
 
-  return sandboxWindow && sandboxWindow[library][key] ? sandboxWindow[library][key] : () => null
+  return sandboxWindow && sandboxWindow[library][key] ? {
+    mount: sandboxWindow[library][key].mount,
+    unmount: sandboxWindow[library][key].unmount,
+  } : {
+    mount: () => null,
+    unmount: () => null,
+  }
 }
 
 
@@ -141,12 +150,14 @@ const mount = async ({
   const resource = await Promise.all(resourcePromise);
 
   const jsFiles: string[] = [];
-  const cssFiles: string[] = [];
+  const cssFiles: Map<string, string> = new Map();
   resource.map(async (file) => {
     if (file.config.fileType === 'js') {
       jsFiles.push(file.data)
     } else if (file.config.fileType === 'css') {
-      cssFiles.push(file.data)
+      // console.log(file.config.url)
+      // cssFiles.push(file.data)
+      cssFiles.set(file.config.url, file.data)
     }
   });
 
@@ -177,10 +188,23 @@ const mount = async ({
   // shadow dom 中插入组件样式
   tasks[item.path]?.map(task => {
     // style 方式插入样式 避免 css 异步加载导致样式问题
-    tenonMap[item.library].styles.map((styleCode: string) => {
+    const rootDom = task.root();
+
+    if (!rootDom) {
+      return
+    }
+
+    tenonMap[item.library].styles.forEach((value: string, key: string) => {
+      const styleId = key.replace(/[^a-zA-Z\d]/g, '');
+      // 避免更新时重复添加
+      if (rootDom.querySelector(`#${styleId}`)) {
+        return
+      }
+
       const styleDom = document.createElement('style');
-      styleDom.appendChild(document.createTextNode(styleCode));
-      task.root().appendChild(styleDom);
+      styleDom.id = styleId;
+      styleDom.appendChild(document.createTextNode(value));
+      rootDom.appendChild(styleDom);
     })
 
     blockSandboxMapping[task.key] = item.library

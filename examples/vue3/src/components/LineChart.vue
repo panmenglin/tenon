@@ -20,6 +20,7 @@ export default {
   name: "echartsBox",
   setup() {
     onMounted(() => {
+      console.log('vue3 onMounted')
       initChart();
     });
 

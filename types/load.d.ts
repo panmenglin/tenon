@@ -29,10 +29,21 @@ declare type EntryConfigParams = {
     callback: (key?: string) => void;
     root: () => ShadowRoot;
 };
-export declare const blockRender: (key: string) => (() => HTMLElement);
+export declare const blockLifeCycle: (key: string) => {
+    mount: (el: HTMLElement, props: Record<string, any>) => HTMLElement;
+    unmount: (el: HTMLElement) => void;
+};
 /**
  * 读取入口文件获取配置
  * @param param0
  */
 export declare const load: ({ config, callback, root, }: EntryConfigParams) => Promise<void>;
+/**
+ * 加载模块资源
+ * @param item
+ * @param callback
+ */
+declare const mount: ({ item, }: {
+    item: Resource;
+}) => Promise<void>;
 export {};

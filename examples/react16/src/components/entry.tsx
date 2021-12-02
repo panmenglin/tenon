@@ -5,15 +5,20 @@ import { LineChart } from './chart-line';
 
 import zhCN from 'antd/lib/locale/zh_CN';
 
-const mount = {
-  LineChart: (el: HTMLElement, props: any): void => {
-    ReactDOM.render(
-      <ConfigProvider locale={zhCN}>
-        <LineChart {...props}></LineChart>
-      </ConfigProvider>,
-      el,
-    );
+const blocks = {
+  LineChart: {
+    mount: (el: HTMLElement, props: any): void => {
+      ReactDOM.render(
+        <ConfigProvider locale={zhCN}>
+          <LineChart {...props}></LineChart>
+        </ConfigProvider>,
+        el
+      );
+    },
+    unmount: (el: HTMLElement): void => {
+      ReactDOM.unmountComponentAtNode(el);
+    },
   },
 };
 
-export default mount;
+export default blocks;
