@@ -20,7 +20,6 @@ export default {
   name: "echartsBox",
   setup() {
     onMounted(() => {
-      console.log('vue3 onMounted')
       initChart();
     });
 
@@ -80,7 +79,6 @@ export default {
       // window.onresize = function() {
       //   //自适应大小
       //   chart.resize();
-      //   console.log(1212121)
       // };
 
       window.addEventListener('resize', () => {

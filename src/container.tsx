@@ -6,6 +6,7 @@ import React, {
   useState,
   useRef,
   useMemo,
+  useLayoutEffect,
 } from 'react';
 import root from 'react-shadow';
 import retargetEvents from 'react-shadow-dom-retarget-events';
@@ -50,24 +51,28 @@ export const TenonContainer = (props: Props): ReactElement => {
     if (JSON.stringify(block) === JSON.stringify(curBlock)) {
       return;
     }
-
     setCurBlock(block);
+  }, [block, curBlock]);
+
+  useLayoutEffect(() => {
+    if (shadowDom?.current) {
+      retargetEvents(shadowDom?.current);
+    }
+  }, [shadowDom]);
+
+  useLayoutEffect(() => {
     load({
       config: {
         ...block,
       },
       callback: updateLoaded,
-      root: () => {
-        return shadowDom?.current?.shadowRoot;
-      },
+      root: () => new Promise(resolve => {
+        setTimeout(() => {
+          resolve(shadowDom?.current?.shadowRoot);
+        })
+      })
     });
-  }, [block, curBlock]);
-
-  useEffect(() => {
-    if (shadowDom?.current) {
-      retargetEvents(shadowDom?.current);
-    }
-  }, [shadowDom]);
+  }, [curBlock, shadowDom.current]);
 
   /**
    * 异步调用渲染方法
@@ -135,7 +140,7 @@ export const TenonContainer = (props: Props): ReactElement => {
       >
         {asyncBlock ? (
           <div className="devtool-block-info">
-            {curBlock?.name} - {curBlock?.domain} / {curBlock?.import}
+            {curBlock?.name} / {curBlock?.import}
           </div>
         ) : null}
 

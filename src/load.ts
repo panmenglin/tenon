@@ -15,7 +15,7 @@ export type Resource = {
   library: string;
   key: string;
   path: string;
-  root: () => ShadowRoot;
+  root: () => Promise<ShadowRoot>;
   publicPath: string;
   externals: {
     js: string[];
@@ -34,7 +34,7 @@ type EntryConfigParams = {
     import: string;
   };
   callback: (key?: string) => void;
-  root: () => ShadowRoot;
+  root: () => Promise<ShadowRoot>;
 }
 
 const tenonMap: Record<string, any> = {} as const; // summao 存储空间
@@ -62,7 +62,7 @@ export const blockLifeCycle = (key: string): {
 const tasks: Record<string, {
   key: string;
   callback: (key?: string) => void;
-  root: () => ShadowRoot;
+  root: () => Promise<ShadowRoot>;
 }[] | undefined> = {} as const; // 异步任务
 
 /**
@@ -155,8 +155,6 @@ const mount = async ({
     if (file.config.fileType === 'js') {
       jsFiles.push(file.data)
     } else if (file.config.fileType === 'css') {
-      // console.log(file.config.url)
-      // cssFiles.push(file.data)
       cssFiles.set(file.config.url, file.data)
     }
   });
@@ -172,7 +170,7 @@ const mount = async ({
   }
 
   const proxyWindow = tenonMap[item.library].sandbox.proxy;
-  proxyWindow.body = item.root()
+  proxyWindow.body = await item.root()
 
   tenonMap[item.library].run = tenonMap[item.library].run || createEvalScripts(jsFiles).bind(proxyWindow.window);
   tenonMap[item.library].styles = tenonMap[item.library].styles || cssFiles
@@ -186,26 +184,24 @@ const mount = async ({
   }
 
   // shadow dom 中插入组件样式
-  tasks[item.path]?.map(task => {
+  tasks[item.path]?.map(async task => {
     // style 方式插入样式 避免 css 异步加载导致样式问题
-    const rootDom = task.root();
+    const rootDom = await task.root();
 
-    if (!rootDom) {
-      return
+    if (rootDom) {
+      tenonMap[item.library].styles.forEach((value: string, key: string) => {
+        const styleId = key.replace(/[^a-zA-Z\d]/g, '');
+        // 避免更新时重复添加
+        if (rootDom.querySelector(`#${styleId}`)) {
+          return
+        }
+
+        const styleDom = document.createElement('style');
+        styleDom.id = styleId;
+        styleDom.appendChild(document.createTextNode(value));
+        rootDom.appendChild(styleDom);
+      })
     }
-
-    tenonMap[item.library].styles.forEach((value: string, key: string) => {
-      const styleId = key.replace(/[^a-zA-Z\d]/g, '');
-      // 避免更新时重复添加
-      if (rootDom.querySelector(`#${styleId}`)) {
-        return
-      }
-
-      const styleDom = document.createElement('style');
-      styleDom.id = styleId;
-      styleDom.appendChild(document.createTextNode(value));
-      rootDom.appendChild(styleDom);
-    })
 
     blockSandboxMapping[task.key] = item.library
     task.callback(task.key);

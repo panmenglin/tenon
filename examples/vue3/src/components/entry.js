@@ -9,13 +9,11 @@ let instance = null;
 const mount = {
   LineChart: {
     mount: async (el) => {
-      console.log('vue3 mount')
       instance = createApp(LineChart);
       instance.use(Antd);
       instance.mount(el);
     },
     unmount: async (el) => {
-      console.log('vue3 unmount')
       instance.unmount();
       instance._container.innerHTML = '';
     },

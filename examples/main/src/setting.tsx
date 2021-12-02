@@ -37,7 +37,7 @@ export const formatJson = (
 };
 
 export const Setting: FC = () => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
 

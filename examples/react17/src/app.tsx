@@ -12,14 +12,11 @@ interface Props {
 }
 
 export const App: FC<Props> = (props) => {
-  console.log(props);
 
   useLayoutEffect(() => {
 
-    console.log(document.querySelector('body'))
-
     const resizeObserver = new ResizeObserver((entries) => {
-      console.log(123)
+      console.log('resize')
     });
 
     resizeObserver.observe(document.querySelector('body'));

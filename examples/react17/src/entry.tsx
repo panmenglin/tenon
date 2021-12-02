@@ -8,15 +8,17 @@ import { App } from './app';
 
 import './app.less';
 
-const mount = {
-  React17App: (el: HTMLElement, props: any): void => {
-    ReactDOM.render(
-      <ConfigProvider locale={zhCN}>
-        <App history={createBrowserHistory()} {...props}/>
-      </ConfigProvider>,
-      el,
-    );
+const blocks = {
+  React17App: {
+    mount: (el: HTMLElement, props: any): void => {
+      ReactDOM.render(
+        <ConfigProvider locale={zhCN}>
+          <App history={createBrowserHistory()} {...props} />
+        </ConfigProvider>,
+        el
+      );
+    },
   },
 };
 
-export default mount;
+export default blocks;
