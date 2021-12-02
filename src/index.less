@@ -17,6 +17,7 @@
     z-index: 9;
     top: -36px;
     right: -1px;
+    max-width: 100%;
     padding: 6px 16px;
     border-top-left-radius: 8px;
     color: #2695F1;
@@ -30,6 +31,9 @@
 
       .devtool-block-info {
         display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }
