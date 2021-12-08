@@ -1,3 +1,7 @@
+const { NODE_ENV } = process.env;
+
+const HOST = NODE_ENV === 'development' ? 'http://localhost:7001' : '/tenon-examples'
+
 export const Config = {
   col: [
     {
@@ -6,7 +10,7 @@ export const Config = {
       blocks: [{
         name: 'react17,antd',
         key: 'UserInfo',
-        import: 'http://localhost:7001/react17/entry.json'
+        import: `${HOST}/react17/entry.json`
       }]
     },
     {
@@ -15,7 +19,7 @@ export const Config = {
       blocks: [{
         name: 'react17,antd,@ant-design/charts',
         key: 'LineChart',
-        import: 'http://localhost:7001/react17/entry.json'
+        import: `${HOST}/react17/entry.json`
       }]
     },
     {
@@ -24,7 +28,7 @@ export const Config = {
       blocks: [{
         name: 'react16,antd,@ant-design/charts',
         key: 'LineChart',
-        import: 'http://localhost:7001/react16/entry.json'
+        import: `${HOST}/react16/entry.json`
       }]
     },
     {
@@ -33,7 +37,7 @@ export const Config = {
       blocks: [{
         name: 'vue3,ant-design-vue,echarts',
         key: 'LineChart',
-        import: 'http://localhost:7001/vue3/entry.json'
+        import: `${HOST}/vue3/entry.json`
       }]
     },
     {
@@ -42,7 +46,7 @@ export const Config = {
       blocks: [{
         name: 'vue,iview,vue-echarts',
         key: 'PieChart',
-        import: 'http://localhost:7001/vue/entry.json'
+        import: `${HOST}/vue/entry.json`
       }]
     }
   ]

@@ -1,7 +1,7 @@
 const path = require('path');
 const { TenonWebpackPlugin } = require('tenon-webpack-plugin');
 
-const { NODE_ENV } = process.env;
+const { NODE_ENV, BUILD_ENV } = process.env;
 
 module.exports = {
   pages: {
@@ -13,9 +13,9 @@ module.exports = {
   devServer: { port: 7009 },
   outputDir: path.resolve(
     __dirname,
-    NODE_ENV === 'development' ? './dist' : '../main/public/vue3'
+    NODE_ENV === 'development' ? './dist' : BUILD_ENV === 'origin' ? path.resolve(__dirname, '../main/dist/vue3') : path.resolve(__dirname, '../main/public/vue3'),
   ),
-  publicPath: NODE_ENV === 'development' ? '/' : 'http://localhost:7001/vue3/',
+  publicPath: NODE_ENV === 'development' ? '/' : BUILD_ENV === 'origin' ? 'https://panmenglin.github.io/tenon-examples/vue3/' : 'http://localhost:7001/vue3/',
   configureWebpack: {
     mode: 'development',
     devtool: 'source-map',

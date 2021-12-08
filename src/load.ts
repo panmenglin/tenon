@@ -1,12 +1,7 @@
-import axios from 'axios';
 import { MultipleProxySandbox } from './sandbox';
 import { createEvalScripts } from './eval-scripts';
 
-declare module "axios" {
-  export interface AxiosRequestConfig {
-    fileType?: string;
-  }
-}
+import fetchFileByCache from './axios';
 
 export type Resource = {
   blocks: string[];
@@ -82,7 +77,10 @@ export const load = async ({
 
       const res: {
         data: Resource
-      } = entryMap[config.import] || await axios.get(config.import);
+      } = entryMap[config.import] || await fetchFileByCache({
+        url: config.import,
+        method: 'get',
+      });
 
       entryMap[config.import] = res;
 
@@ -126,10 +124,12 @@ const mount = async ({
     const jsList = (externals?.js || []).concat(js);
     jsList.map((jsItem: string) => {
       resourcePromise.push(
-        axios.get(jsItem, {
+        fetchFileByCache({
+          url: jsItem,
+          method: 'get',
           fileType: 'js',
           baseURL: item.publicPath,
-        }),
+        })
       );
     });
   }
@@ -139,10 +139,12 @@ const mount = async ({
     const cssList = (externals?.css || []).concat(css);
     cssList.map((cssItem: string) => {
       resourcePromise.push(
-        axios.get(cssItem, {
+        fetchFileByCache({
+          url: cssItem,
+          method: 'get',
           fileType: 'css',
           baseURL: item.publicPath,
-        }),
+        })
       );
     });
   }

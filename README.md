@@ -4,6 +4,8 @@ English | [简体中文](./README.zh-CN.md)
 
 Tenon is an implementation of Micro Frontends, which refers to single-spa and qiankun. It aims to provide a way to share business components between projects to support the decoupling and reorganization of cross-team and large-scale projects.
 
+[DEMO](https://panmenglin.github.io/tenon-examples/)
+
 ---
 
 ## Core Design Philosophy Of Tenon
@@ -132,7 +134,7 @@ npm run install:all
 
 2、Build blocks
 ```
-npm run build:examples
+npm run build:local-examples
 ```
 
 3、Start the main App

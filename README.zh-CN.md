@@ -4,6 +4,8 @@
 
 榫卯（Tenon）是一个微前端实现库，参考了 single-spa 和 qiankun，旨在提供一种项目间共享业务组件的方式，以支持跨团队、大规模项目的解耦和重组。
 
+[DEMO](https://panmenglin.github.io/tenon-examples/)
+
 ---
 
 ## 核心设计理念
@@ -132,7 +134,7 @@ npm run install:all
 2、打包区块
 
 ```
-npm run build:examples
+npm run build:local-examples
 ```
 
 3、启动基座

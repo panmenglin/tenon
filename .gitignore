@@ -1,6 +1,7 @@
 node_modules
 lib
 types
+dist
 .DS_Store
 .vscode
 /npm-debug.log
@@ -10,4 +11,5 @@ yarn-error.log
 *.vim
 
 examples/main/public/**/*
+
 

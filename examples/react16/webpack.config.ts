@@ -11,7 +11,7 @@ interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
 }
 
-const { NODE_ENV } = process.env;
+const { NODE_ENV, BUILD_ENV } = process.env;
 
 const plugins = NODE_ENV === 'development' ? [] : [
   new TenonWebpackPlugin({
@@ -26,8 +26,8 @@ export default (): Configuration => {
     devtool: 'source-map',
     output: {
       filename: 'index.min.js',
-      path: path.resolve(__dirname, '../main/public/react16'),
-      publicPath: NODE_ENV === 'development' ? '/' : 'http://localhost:7001/react16/',
+      path: BUILD_ENV === 'origin' ? path.resolve(__dirname, '../main/dist/react16') : path.resolve(__dirname, '../main/public/react16'),
+      publicPath: NODE_ENV === 'development' ? '/' : BUILD_ENV === 'origin' ? 'https://panmenglin.github.io/tenon-examples/react16/' : 'http://localhost:7001/react16/',
       globalObject: 'window',
       library: 'React16Blocks',
       libraryExport: 'default',

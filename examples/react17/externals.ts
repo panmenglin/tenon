@@ -11,12 +11,12 @@ export const externals = {
 
 export const cdnFiles = {
   css: [
-    `http://unpkg.com/antd@${antdVersion}/dist/antd.min.css`,
+    `https://unpkg.com/antd@${antdVersion}/dist/antd.min.css`,
   ],
   js: [
-    `http://unpkg.com/react@${reactVersion}/umd/react.production.min.js`,
-    `http://unpkg.com/react-dom@${reactDomVersion}/umd/react-dom.production.min.js`,
-    `http://unpkg.com/moment@2.25.3/min/moment-with-locales.min.js`,
-    `http://unpkg.com/antd@${antdVersion}/dist/antd.min.js`,
+    `https://unpkg.com/react@${reactVersion}/umd/react.production.min.js`,
+    `https://unpkg.com/react-dom@${reactDomVersion}/umd/react-dom.production.min.js`,
+    `https://unpkg.com/moment@2.25.3/min/moment-with-locales.min.js`,
+    `https://unpkg.com/antd@${antdVersion}/dist/antd.min.js`,
   ],
 }

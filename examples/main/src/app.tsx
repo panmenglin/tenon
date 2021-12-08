@@ -36,10 +36,10 @@ export const App: FC<Props> = () => {
           >
             <Content className="content">
               <Switch>
-                <Route path="/index" component={IndexPage} />
+                <Route path="/tenon-examples" component={IndexPage} />
                 <Route path="/react17" component={SubAppPage} />
 
-                <Redirect from="*" to={`/index`} />
+                <Redirect from="*" to={`/tenon-examples`} />
 
               </Switch>
             </Content>

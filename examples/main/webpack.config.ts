@@ -16,12 +16,12 @@ const { NODE_ENV } = process.env;
 export default (): Configuration => {
   const config: Configuration = {
     entry: './src/main.tsx',
-    mode: 'development',
+    mode: NODE_ENV === 'development' ? 'development' : 'production',
     devtool: 'source-map',
     output: {
       filename: 'static/[name]_[hash:8].js',
       path: path.resolve(__dirname, './dist'),
-      publicPath: '/',
+      publicPath:  NODE_ENV === 'development' ? '/' : '/tenon-examples'
     },
     resolve: {
       alias: {
@@ -111,7 +111,7 @@ export default (): Configuration => {
         chunkFilename: 'static/[name].[hash:8].css',
       }),
       new webpack.DefinePlugin({
-        __DEVTOOL: NODE_ENV === 'development' ? true : false,
+        __DEVTOOL: true,
       })
     ]
   }
