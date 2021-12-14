@@ -7,6 +7,7 @@ import { match } from 'react-router';
 
 import { UserInfo } from '@/components/user-info';
 import { LineChart } from '@/components/line-chart';
+import { BarChart } from '@/components/bar-chart';
 
 import './index.less';
 
@@ -30,6 +31,9 @@ export const Demo: FC = (props: Props) => {
         </Col>
         <Col span={24}>
           <LineChart></LineChart>
+        </Col>
+        <Col span={24}>
+          <BarChart></BarChart>
         </Col>
       </Row>
     </div>

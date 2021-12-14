@@ -18,6 +18,7 @@
     "@ant-design/charts": "^1.2.14",
     "ahooks": "^2.10.11",
     "antd": "^4.16.13",
+    "echarts": "^5.2.2",
     "moment": "^2.29.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",

@@ -23,6 +23,15 @@ export const Config = {
       }]
     },
     {
+      key: 'BarChart - React17',
+      span: 12,
+      blocks: [{
+        name: 'react17,antd,echarts',
+        key: 'BarChart',
+        import: `${HOST}/react17/entry.json`
+      }]
+    },
+    {
       key: 'LineChart - React16',
       span: 12,
       blocks: [{

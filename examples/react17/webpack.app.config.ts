@@ -13,7 +13,7 @@ interface Configuration extends WebpackConfiguration {
 
 import { externals, cdnFiles } from './externals';
 
-const { NODE_ENV } = process.env;
+const { NODE_ENV, BUILD_ENV } = process.env;
 
 const plugins = NODE_ENV === 'development' ? [] : [
   new TenonWebpackPlugin({
@@ -32,8 +32,8 @@ export default (): Configuration => {
     devtool: 'source-map',
     output: {
       filename: 'static/[name]_[hash:8].js',
-      path: path.resolve(__dirname, '../main/public/react17App'),
-      publicPath: NODE_ENV === 'development' ? '/' : 'http://localhost:7001/react17App/',
+      path: BUILD_ENV === 'origin' ? path.resolve(__dirname, '../main/dist/react17App') : path.resolve(__dirname, '../main/public/react17App'),
+      publicPath: NODE_ENV === 'development' ? '/' : BUILD_ENV === 'origin' ? 'https://panmenglin.github.io/tenon-examples/react17App/' : 'http://localhost:7001/react17App/',
       globalObject: 'window',
       library: 'react17AppBlocks',
       libraryExport: 'default', // 对应 ./index.ts 中导出的变量
