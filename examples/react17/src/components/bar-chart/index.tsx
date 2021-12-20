@@ -94,6 +94,10 @@ export const BarChart: FC = (props) => {
         },
       ],
     });
+
+    window.addEventListener('resize', () => {
+      myChart.resize();
+    })
   }, [chartDom]);
 
   return (
