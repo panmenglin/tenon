@@ -5,7 +5,7 @@ import { Row, Col } from 'antd';
 import { History } from 'history';
 import { match } from 'react-router';
 
-import { ChartLine } from '@/components/chart-line';
+import { LineChart } from '@/components/chart-line';
 
 import './demo.less';
 
@@ -25,7 +25,7 @@ export const Demo: FC = (props: Props) => {
     <div className="container">
       <Row gutter={[46, 16]}>
         <Col span={24}>
-          <ChartLine></ChartLine>
+          <LineChart></LineChart>
         </Col>
       </Row>
     </div>

@@ -42,7 +42,7 @@ export const blockLifeCycle = (key: string): {
   unmount: (el: HTMLElement) => void,
 } => {
   const library = blockSandboxMapping[key]
-  const sandboxWindow = tenonMap[library].sandbox?.proxy.window;
+  const sandboxWindow = tenonMap[library].sandbox?.proxy
 
   return sandboxWindow && sandboxWindow[library][key] ? {
     mount: sandboxWindow[library][key].mount,
@@ -161,25 +161,30 @@ const mount = async ({
     }
   });
 
+  const shadowRoot = await item.root()
+
   // 相同 library 复用已有沙箱
-  if (!tenonMap[item.library].sandbox) {
+  // if (!tenonMap[item.library].sandbox) {
+  tenonMap[item.library].sandbox = new MultipleProxySandbox(
+    item.library,
+    {
+      window,
+      document: shadowRoot
+    }
+  );
+  tenonMap[item.library].sandbox.active();
 
-    tenonMap[item.library].sandbox = new MultipleProxySandbox(
-      item.library,
-    );
-    tenonMap[item.library].sandbox.active();
-
-  }
+  // }
 
   const proxyWindow = tenonMap[item.library].sandbox.proxy;
-  proxyWindow.body = await item.root()
 
   tenonMap[item.library].run = tenonMap[item.library].run || createEvalScripts(jsFiles).bind(proxyWindow.window);
   tenonMap[item.library].styles = tenonMap[item.library].styles || cssFiles
 
   try {
     tenonMap[item.library].run({
-      window: proxyWindow.window,
+      window: proxyWindow,
+      document: proxyWindow.document
     });
   } catch (error) {
     console.error(error)
