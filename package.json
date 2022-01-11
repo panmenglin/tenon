@@ -1,14 +1,16 @@
 {
   "name": "tenon-maker",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "author": "panmenglin <max.pan@outlook.com>",
   "description": "A implementation of Micro Frontends",
   "homepage": "",
   "license": "MIT",
   "main": "lib/index.js",
+  "module": "module/index.js",
   "types": "types/index.d.ts",
   "files": [
-    "lib/"
+    "lib",
+    "module"
   ],
   "engines": {
     "node": ">=10.0.0"
@@ -28,11 +30,11 @@
     "url": "https://github.com/panmenglin/tenon/issues"
   },
   "scripts": {
-    "clean": "del-cli --dot=true \"./lib/**/*\" && del-cli --dot=true \"./types/**/*\"",
+    "clean": "del-cli --dot=true \"./lib/**/*\" && del-cli --dot=true \"./types/**/*\" && del-cli --dot=true \"./module/**/*\"",
     "lint": "eslint --ext .js,.ts .",
     "lint.fix": "eslint --ext .js,.ts --fix .",
     "typescript": "tsc",
-    "build": "npm run clean && tsc -p tsconfig.lib.json && tsc -p tsconfig.declaration.json && cp src/*.less lib/",
+    "build": "npm run clean && tsc -p tsconfig.lib.json && tsc -p tsconfig.declaration.json && tsc -p tsconfig.module.json && cp src/*.less lib/ && cp src/*.less module/",
     "install:all": "npm run install:main && npm run install:react16 && npm run install:react17 && npm run install:vue && npm run install:vue3",
     "build:local-examples": "npm run build:local-react16 && npm run build:local-react17 && npm run build:local-react17-app && npm run build:local-vue && npm run build:local-vue3",
     "build:examples": "npm run build:main && npm run build:react16 && npm run build:react17 && npm run build:react17-app && npm run build:vue && npm run build:vue3",

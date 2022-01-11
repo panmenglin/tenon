@@ -1,5 +1,6 @@
 node_modules
 lib
+module
 types
 dist
 .DS_Store
